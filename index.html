@@ -1,0 +1,4616 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Yummy Math — a fun food-themed Grade 1 math game with counting, addition, subtraction, shapes and more.">
+<meta name="theme-color" content="#f97316">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='78' font-size='82'>%F0%9F%8D%8E</text></svg>">
+
+<title>Yummy Math 🍎 Grade 1 Food Math</title>
+
+<style>
+
+:root {
+
+  --cream:        #fffaf2;
+  --dough:        #fff1dc;
+  --crust:        #f6c88b;
+  --tomato:       #ef4444;
+  --tomato-dark:  #b91c1c;
+  --carrot:       #f97316;
+  --carrot-dark:  #c2410c;
+  --pumpkin:      #f59e0b;
+  --honey:        #fbbf24;
+  --honey-soft:   #fde68a;
+  --berry:        #e11d48;
+  --berry-soft:   #ffe4ec;
+  --mint:         #22c55e;
+  --mint-dark:    #15803d;
+  --mint-soft:    #dcfce7;
+  --basil:        #166534;
+  --cocoa:        #7c4a2d;
+  --choco:        #43251a;
+  --ink:          #3d2a1d;
+  --muted:        #8b7361;
+  --paper:        #ffffff;
+  --line:         #ffe3bd;
+
+  --shadow-sm:    0 3px 0 rgba(146, 64, 14, 0.12);
+  --shadow-md:    0 8px 20px rgba(146, 64, 14, 0.14);
+  --shadow-lg:    0 18px 40px rgba(146, 64, 14, 0.18);
+  --shadow-inner: inset 0 -4px 0 rgba(0, 0, 0, 0.06);
+
+  --radius-sm:    12px;
+  --radius-md:    18px;
+  --radius-lg:    26px;
+  --radius-xl:    34px;
+  --radius-pill:  999px;
+
+  --fast:         0.15s;
+  --normal:       0.28s;
+  --slow:         0.55s;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: Verdana, Geneva, Tahoma, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background-color: var(--cream);
+
+  background:
+    radial-gradient(circle at 8% 12%,  #ffd9c7 0 7%, transparent 8%),
+    radial-gradient(circle at 92% 8%,  #fff0b8 0 8%, transparent 9%),
+    radial-gradient(circle at 4% 78%,  #ffe0ea 0 7%, transparent 8%),
+    radial-gradient(circle at 96% 72%, #dcffd9 0 8%, transparent 9%),
+    radial-gradient(circle at 50% 50%, #fffdf8 0 40%, transparent 70%),
+    linear-gradient(150deg, #fff8ee 0%, #ffeef3 45%, #f2fff4 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  line-height: 1.2;
+  color: var(--carrot-dark);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--carrot-dark);
+}
+
+:focus-visible {
+  outline: 4px solid var(--honey);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.float-food {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.35;
+  filter: blur(0.2px);
+  animation-name: drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.float-food.spin {
+  animation-name: drift, slowSpin;
+  animation-timing-function: linear, linear;
+  animation-iteration-count: infinite, infinite;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+main#screen {
+  flex: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 30px 18px 70px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: linear-gradient(115deg, #fb923c, #f97316, #fb7185, #f97316);
+  background-size: 320% 100%;
+  animation: gradientSlide 18s ease-in-out infinite;
+  box-shadow: 0 6px 22px rgba(194, 65, 12, 0.35);
+  border-bottom: 4px solid #ffd8ae;
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.brand-icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  border-radius: 19px;
+  background: linear-gradient(150deg, #fff7df, #ffe6b8);
+  box-shadow: 0 6px 0 #e0a95f, 0 10px 18px rgba(120, 53, 15, 0.25);
+  animation: mascotBoing 3.4s ease-in-out infinite;
+}
+
+.brand-text {
+  text-align: left;
+}
+
+.brand-title {
+  font-size: 25px;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 0 rgba(154, 52, 18, 0.35);
+}
+
+.brand-sub {
+  font-size: 12px;
+  color: #fff3e0;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--carrot-dark);
+  font-weight: bold;
+  font-size: 17px;
+  box-shadow: 0 5px 0 #ffd8ae;
+  white-space: nowrap;
+}
+
+.chip-icon {
+  font-size: 20px;
+  animation: sway 4s ease-in-out infinite;
+}
+
+.chip.pop {
+  animation: chipPop 0.6s ease;
+}
+
+.icon-btn {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 5px 0 #ffd8ae;
+  transition: transform var(--fast) ease, background var(--fast) ease;
+}
+
+.icon-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: #fff6e3;
+}
+
+.icon-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.icon-btn.muted {
+  opacity: 0.65;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 26px;
+  align-items: center;
+  padding: 34px;
+  margin-bottom: 34px;
+  border-radius: var(--radius-xl);
+  border: 3px solid #ffe0b0;
+  background: linear-gradient(135deg, #ffffff 0%, #fff8ec 55%, #fff2f7 100%);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "🍓  🍪  🍕  🍩";
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 22px;
+  opacity: 0.85;
+  animation: sway 5s ease-in-out infinite;
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--mint-soft);
+  color: var(--basil);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: clamp(30px, 6vw, 46px);
+  margin-bottom: 10px;
+}
+
+.hero-text {
+  color: var(--muted);
+  font-size: 17px;
+  max-width: 46ch;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.mascot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 28px;
+  background: linear-gradient(150deg, #fff4cd, #ffe2d1 55%, #e8ffdc);
+  border: 3px dashed var(--honey);
+}
+
+.mascot-body {
+  font-size: clamp(58px, 12vw, 88px);
+  animation: mascotBoing 2.8s ease-in-out infinite;
+}
+
+.mascot-shadow {
+  width: 90px;
+  height: 14px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: rgba(146, 64, 14, 0.15);
+  animation: shadowBreathe 2.8s ease-in-out infinite;
+}
+
+.mascot-name {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--cocoa);
+}
+
+.bubble {
+  position: relative;
+  margin-top: 14px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 2px solid var(--line);
+  color: var(--cocoa);
+  font-size: 14px;
+  text-align: center;
+  animation: bubbleFloat 4s ease-in-out infinite;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-left: 2px solid var(--line);
+  border-top: 2px solid var(--line);
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 15px 26px;
+  border: 0;
+  border-radius: var(--radius-md);
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--fast) ease, box-shadow var(--fast) ease, filter var(--fast) ease;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-3px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-18deg);
+}
+
+.btn:hover::before {
+  animation: shineSweep 0.85s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(95deg, #fb923c, #ef4444);
+  color: #ffffff;
+  box-shadow: 0 6px 0 var(--carrot-dark), var(--shadow-sm);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--carrot-dark);
+  border: 3px solid var(--honey-soft);
+  box-shadow: 0 5px 0 #ffe2b0;
+}
+
+.btn-ghost {
+  background: var(--dough);
+  color: var(--cocoa);
+  border: 2px solid var(--line);
+  box-shadow: 0 4px 0 #ffe2b0;
+}
+
+.btn-mint {
+  background: linear-gradient(95deg, #34d399, #059669);
+  color: #ffffff;
+  box-shadow: 0 6px 0 #047857;
+}
+
+.btn-berry {
+  background: linear-gradient(95deg, #fb7185, #e11d48);
+  color: #ffffff;
+  box-shadow: 0 6px 0 #9f1239;
+}
+
+.btn-big {
+  font-size: 19px;
+  padding: 18px 34px;
+  border-radius: var(--radius-lg);
+}
+
+.btn-sm {
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(255, 255, 255, 0.7);
+  animation: rippleOut 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 6px 0 18px;
+}
+
+.section-title {
+  font-size: 27px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title .emoji {
+  animation: sway 4.5s ease-in-out infinite;
+}
+
+.section-note {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.lessons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.lesson-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 18px 18px;
+  border: 3px solid #ffffff;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--normal) ease, box-shadow var(--normal) ease;
+}
+
+.lesson-card:hover {
+  transform: translateY(-8px) rotate(-1deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.lesson-card:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+.lesson-card::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -30%;
+  width: 60%;
+  height: 220%;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  transform: rotate(18deg) translateX(-160%);
+  transition: transform 0.7s ease;
+}
+
+.lesson-card:hover::before {
+  transform: rotate(18deg) translateX(320%);
+}
+
+.lesson-card.tone-1 { background: linear-gradient(150deg, #ffd7dc, #ffe9ef); }
+.lesson-card.tone-2 { background: linear-gradient(150deg, #ffe6a8, #fff6d3); }
+.lesson-card.tone-3 { background: linear-gradient(150deg, #ffd6ae, #ffeada); }
+.lesson-card.tone-4 { background: linear-gradient(150deg, #d9f8c4, #ecffe2); }
+.lesson-card.tone-5 { background: linear-gradient(150deg, #ffe3b8, #fff2d6); }
+.lesson-card.tone-6 { background: linear-gradient(150deg, #d6f2ff, #eafaff); }
+.lesson-card.tone-7 { background: linear-gradient(150deg, #ffded1, #fff0e8); }
+.lesson-card.tone-8 { background: linear-gradient(150deg, #e8dcff, #f4eeff); }
+.lesson-card.tone-9 { background: linear-gradient(150deg, #ffe9c4, #fff8e6); }
+.lesson-card.tone-10 { background: linear-gradient(150deg, #d8ffe8, #eefff6); }
+
+.lesson-icon {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 0 rgba(146, 64, 14, 0.12);
+  transition: transform var(--fast) ease;
+}
+
+.lesson-card:hover .lesson-icon {
+  animation: wiggle 0.6s ease;
+}
+
+.lesson-title {
+  font-size: 19px;
+  color: var(--cocoa);
+}
+
+.lesson-desc {
+  font-size: 13.5px;
+  color: #6f5b4a;
+  min-height: 40px;
+}
+
+.lesson-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.lesson-best {
+  font-size: 12.5px;
+  font-weight: bold;
+  color: var(--carrot-dark);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-pill);
+  padding: 5px 11px;
+}
+
+.lesson-best.fresh {
+  color: var(--mint-dark);
+}
+
+.lesson-go {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--cocoa);
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  transition: background var(--fast) ease, transform var(--fast) ease;
+}
+
+.lesson-card:hover .lesson-go {
+  background: #ffffff;
+  transform: translateX(3px);
+}
+
+.lesson-ribbon {
+  position: absolute;
+  top: 10px;
+  right: -34px;
+  transform: rotate(38deg);
+  padding: 4px 40px;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  color: #ffffff;
+  background: linear-gradient(95deg, #34d399, #059669);
+  box-shadow: 0 3px 8px rgba(4, 120, 87, 0.35);
+}
+
+.quiz {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 28px;
+  border: 3px solid #ffe2bd;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(160deg, #ffffff 0%, #fffaf2 100%);
+  box-shadow: var(--shadow-md);
+  animation: riseIn 0.5s ease both;
+}
+
+.quiz-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.quiz-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--cocoa);
+}
+
+.quiz-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--cocoa);
+  background: var(--dough);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 5px 14px;
+}
+
+.streak {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--berry);
+  background: var(--berry-soft);
+  border: 2px solid #ffc9d6;
+  border-radius: var(--radius-pill);
+  padding: 5px 13px;
+}
+
+.streak.show {
+  display: inline-flex;
+  animation: popIn 0.4s ease;
+}
+
+.streak-fire {
+  animation: flicker 1.2s ease-in-out infinite;
+}
+
+.bar {
+  position: relative;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  background: #ffe9d6;
+  box-shadow: inset 0 2px 4px rgba(146, 64, 14, 0.14);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(95deg, var(--honey), var(--carrot), var(--berry));
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.35) 0 12px,
+    rgba(255, 255, 255, 0) 12px 24px
+  );
+  animation: stripeMove 1.2s linear infinite;
+}
+
+.plaque {
+  position: relative;
+  margin: 6px 0 18px;
+  padding: 24px 16px;
+  border: 3px dotted var(--honey);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #fff8e1 0%, #ffe8ef 50%, #eaffe2 100%);
+  text-align: center;
+  overflow: hidden;
+}
+
+.plaque-food {
+  font-size: clamp(30px, 6.5vw, 46px);
+  line-height: 1.7;
+  letter-spacing: 4px;
+  word-break: break-word;
+}
+
+.plaque-food span {
+  display: inline-block;
+  animation: bobble 3s ease-in-out infinite;
+}
+
+.question {
+  text-align: center;
+  font-size: clamp(21px, 4.4vw, 27px);
+  color: var(--carrot-dark);
+  margin: 6px 0 20px;
+  animation: riseIn 0.45s ease both;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.answer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 12px;
+  min-height: 76px;
+  border: 3px solid #ffd8a8;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  box-shadow: 0 5px 0 #ffe4c4;
+  color: var(--carrot-dark);
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform var(--fast) ease, background var(--fast) ease, border-color var(--fast) ease;
+}
+
+.answer:hover:not([disabled]) {
+  background: #fff7de;
+  border-color: var(--carrot);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.answer:active:not([disabled]) {
+  transform: translateY(1px) scale(0.99);
+}
+
+.answer[disabled] {
+  cursor: default;
+}
+
+.answer-key {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  background: var(--dough);
+  color: var(--cocoa);
+}
+
+.answer.correct {
+  background: var(--mint-soft);
+  border-color: var(--mint);
+  color: var(--mint-dark);
+  animation: correctBounce 0.6s ease;
+}
+
+.answer.wrong {
+  background: #ffe4e6;
+  border-color: #fb7185;
+  color: #be123c;
+  animation: wrongShake 0.5s ease;
+}
+
+.answer.dimmed {
+  opacity: 0.55;
+}
+
+.feedback {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 15px 18px;
+  border-radius: var(--radius-md);
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.feedback.show {
+  display: flex;
+  animation: riseIn 0.35s ease both;
+}
+
+.feedback.ok {
+  background: var(--mint-soft);
+  border: 2px solid #86efac;
+  color: var(--basil);
+}
+
+.feedback.no {
+  background: #fff3e6;
+  border: 2px solid #fdba74;
+  color: #9a3412;
+}
+
+.feedback .big {
+  font-size: 22px;
+}
+
+.quiz-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.quiz-actions .right {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.pulse-ready {
+  animation: gentlePulse 1.6s ease-in-out infinite;
+}
+
+.finish {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 34px 28px;
+  text-align: center;
+  border: 3px solid #ffe2bd;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(150deg, #fff7d1 0%, #ffe7d9 45%, #e9ffe1 100%);
+  box-shadow: var(--shadow-lg);
+  animation: zoomIn 0.5s ease both;
+  overflow: hidden;
+}
+
+.finish-badge {
+  font-size: 82px;
+  line-height: 1;
+  animation: trophyHop 1.6s ease-in-out infinite;
+}
+
+.finish-title {
+  font-size: clamp(24px, 5vw, 34px);
+  margin: 10px 0 6px;
+}
+
+.finish-sub {
+  color: #7a5b41;
+  font-size: 17px;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0 6px;
+  font-size: 42px;
+}
+
+.star {
+  opacity: 0.28;
+  filter: grayscale(1);
+  transform: scale(0.8);
+}
+
+.star.on {
+  opacity: 1;
+  filter: none;
+  animation: starPop 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.points-earned {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 8px;
+  padding: 12px 22px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  border: 3px dashed var(--honey);
+  color: var(--carrot-dark);
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.finish-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.finish-note {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #8a6a4f;
+  font-style: italic;
+}
+
+.new-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  border: 2px solid var(--honey-soft);
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--cocoa);
+  box-shadow: var(--shadow-sm);
+  animation: badgeFlip 0.7s ease both;
+}
+
+.badge-pill .tag {
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  background: var(--berry);
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+}
+
+.trophy {
+  max-width: 900px;
+  margin: 0 auto;
+  animation: riseIn 0.45s ease both;
+}
+
+.panel {
+  padding: 26px;
+  margin-bottom: 20px;
+  border: 3px solid #ffe2bd;
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-title {
+  font-size: 21px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.badge-tile {
+  padding: 16px 12px;
+  border-radius: var(--radius-md);
+  border: 3px solid var(--line);
+  background: linear-gradient(150deg, #fffdf7, #fff5e6);
+  text-align: center;
+  transition: transform var(--normal) ease;
+}
+
+.badge-tile:hover {
+  transform: translateY(-5px) rotate(-1deg);
+}
+
+.badge-tile.locked {
+  background: #f6f1ea;
+  border-color: #ece2d4;
+  color: #b6a696;
+  filter: grayscale(0.85);
+}
+
+.badge-icon {
+  font-size: 38px;
+  line-height: 1.2;
+}
+
+.badge-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.badge-need {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.best-list {
+  display: grid;
+  gap: 10px;
+}
+
+.best-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-radius: var(--radius-md);
+  background: var(--dough);
+  border: 2px solid var(--line);
+}
+
+.best-row .row-icon {
+  font-size: 22px;
+}
+
+.best-row .row-name {
+  font-weight: bold;
+  color: var(--cocoa);
+}
+
+.best-row .row-stars {
+  margin-left: auto;
+  letter-spacing: 3px;
+}
+
+.best-row .row-empty {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(67, 37, 26, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.overlay.show {
+  display: flex;
+  animation: fadeIn 0.3s ease both;
+}
+
+.modal {
+  width: 100%;
+  max-width: 620px;
+  max-height: 88vh;
+  overflow: auto;
+  padding: 26px;
+  border: 3px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  box-shadow: var(--shadow-lg);
+  animation: zoomIn 0.35s ease both;
+}
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 23px;
+}
+
+.modal-body {
+  color: #5d4a3b;
+  font-size: 16px;
+}
+
+.modal-body ol,
+.modal-body ul {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.modal-body li {
+  margin-bottom: 8px;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--dough);
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 4px 0 #ffe2b0;
+}
+
+.modal-close:hover {
+  background: #fff3c9;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 24px 18px;
+  text-align: center;
+  font-size: 13.5px;
+  color: #7a6754;
+  background: linear-gradient(90deg, #ffe9c4, #ffe3e6, #e9ffe0);
+  border-top: 3px dashed #ffd9a0;
+}
+
+footer .foot-line {
+  margin-bottom: 4px;
+}
+
+footer .foot-tip {
+  font-size: 12.5px;
+  color: #8d7a67;
+}
+
+.tip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--honey);
+  background: linear-gradient(90deg, #fff6c4, #ffe6d0);
+  color: #6b4b1e;
+  font-size: 15px;
+}
+
+.tip .tip-icon {
+  font-size: 24px;
+  animation: flicker 1.8s ease-in-out infinite;
+}
+
+.mini-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.mini-card {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--line);
+  background: #fffdf7;
+  text-align: center;
+}
+
+.mini-card .mini-icon {
+  font-size: 30px;
+}
+
+.mini-card h4 {
+  margin: 8px 0 4px;
+  font-size: 15px;
+}
+
+.mini-card p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@keyframes gradientSlide {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes mascotBoing {
+  0%   { transform: translateY(0) rotate(-2deg); }
+  25%  { transform: translateY(-7px) rotate(2deg); }
+  50%  { transform: translateY(0) rotate(-1deg); }
+  75%  { transform: translateY(-4px) rotate(1deg); }
+  100% { transform: translateY(0) rotate(-2deg); }
+}
+
+@keyframes shadowBreathe {
+  0%   { transform: scaleX(1); opacity: 0.20; }
+  50%  { transform: scaleX(0.86); opacity: 0.13; }
+  100% { transform: scaleX(1); opacity: 0.20; }
+}
+
+@keyframes sway {
+  0%   { transform: rotate(-6deg); }
+  50%  { transform: rotate(6deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(26px, -34px, 0) scale(1.08); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes bobble {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes bubbleFloat {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes shineSweep {
+  from { left: -120%; }
+  to   { left: 130%; }
+}
+
+@keyframes chipPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.22) rotate(-3deg); }
+  65%  { transform: scale(0.96) rotate(2deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.6); }
+  70%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes correctBounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.08); }
+  55%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wrongShake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-9px); }
+  40%  { transform: translateX(8px); }
+  60%  { transform: translateX(-5px); }
+  80%  { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes wiggle {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(-11deg) scale(1.06); }
+  55%  { transform: rotate(9deg) scale(1.04); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes stripeMove {
+  from { background-position: 0 0; }
+  to   { background-position: 48px 0; }
+}
+
+@keyframes rippleOut {
+  to { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes gentlePulse {
+  0%   { transform: scale(1); box-shadow: 0 6px 0 #047857; }
+  50%  { transform: scale(1.045); box-shadow: 0 8px 0 #047857; }
+  100% { transform: scale(1); box-shadow: 0 6px 0 #047857; }
+}
+
+@keyframes trophyHop {
+  0%   { transform: translateY(0) rotate(-4deg); }
+  30%  { transform: translateY(-14px) rotate(3deg); }
+  60%  { transform: translateY(0) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(-4deg); }
+}
+
+@keyframes starPop {
+  0%   { opacity: 0; transform: scale(0.2) rotate(-40deg); }
+  60%  { opacity: 1; transform: scale(1.3) rotate(12deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes badgeFlip {
+  0%   { opacity: 0; transform: rotateY(90deg) scale(0.8); }
+  100% { opacity: 1; transform: rotateY(0deg) scale(1); }
+}
+
+@keyframes flicker {
+  0%   { transform: scale(1) rotate(-3deg); opacity: 1; }
+  40%  { transform: scale(1.12) rotate(3deg); opacity: 0.9; }
+  100% { transform: scale(1) rotate(-3deg); opacity: 1; }
+}
+
+@keyframes confettiFall {
+  0%   { transform: translateY(-10vh) rotate(0deg) scale(1); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg) scale(0.9); opacity: 0; }
+}
+
+@keyframes confettiSway {
+  0%   { margin-left: 0; }
+  50%  { margin-left: 60px; }
+  100% { margin-left: -20px; }
+}
+
+@keyframes starRain {
+  0%   { transform: translateY(-8vh) scale(0.6); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateY(105vh) scale(1.1); opacity: 0; }
+}
+
+@keyframes sparkleOut {
+  0%   { transform: translate(0, 0) scale(0.4); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.15); opacity: 0; }
+}
+
+@keyframes cardIn {
+  0%   { opacity: 0; transform: translateY(26px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cardShiver {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-6px) rotate(-0.4deg); }
+  50%  { transform: translateX(6px) rotate(0.4deg); }
+  75%  { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes glowPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(251, 113, 133, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(251, 113, 133, 0); }
+}
+
+@keyframes tickTock {
+  0%   { transform: rotate(-8deg); }
+  50%  { transform: rotate(8deg); }
+  100% { transform: rotate(-8deg); }
+}
+
+@keyframes dotBlink {
+  0%   { opacity: 0.25; transform: scale(0.85); }
+  50%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 0.25; transform: scale(0.85); }
+}
+
+@keyframes badgeGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.6); }
+  60%  { box-shadow: 0 0 0 14px rgba(251, 191, 36, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+}
+
+.pop       { animation: popIn 0.4s ease both; }
+.bounce    { animation: correctBounce 0.6s ease; }
+.shake     { animation: wrongShake 0.5s ease; }
+.wiggle    { animation: wiggle 0.6s ease; }
+.bobble    { animation: bobble 3s ease-in-out infinite; }
+.blink     { animation: dotBlink 1.4s ease-in-out infinite; }
+.glow      { animation: glowPulse 2s ease-out infinite; }
+.tocking   { animation: tickTock 2s ease-in-out infinite; }
+
+.fade-in   { animation: fadeIn 0.45s ease both; }
+.rise-in   { animation: riseIn 0.45s ease both; }
+.card-in   { animation: cardIn 0.5s ease both; }
+.shiver    { animation: cardShiver 0.45s ease; }
+
+.d1  { animation-delay: 0.05s; }
+.d2  { animation-delay: 0.10s; }
+.d3  { animation-delay: 0.15s; }
+.d4  { animation-delay: 0.20s; }
+.d5  { animation-delay: 0.25s; }
+.d6  { animation-delay: 0.30s; }
+.d7  { animation-delay: 0.35s; }
+.d8  { animation-delay: 0.40s; }
+.d9  { animation-delay: 0.45s; }
+.d10 { animation-delay: 0.50s; }
+.d11 { animation-delay: 0.55s; }
+.d12 { animation-delay: 0.60s; }
+.d13 { animation-delay: 0.65s; }
+.d14 { animation-delay: 0.70s; }
+.d15 { animation-delay: 0.75s; }
+.d16 { animation-delay: 0.80s; }
+.d17 { animation-delay: 0.85s; }
+.d18 { animation-delay: 0.90s; }
+.d19 { animation-delay: 0.95s; }
+.d20 { animation-delay: 1.00s; }
+
+#fx {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -40px;
+  font-size: 24px;
+  will-change: transform;
+  animation-name: confettiFall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.confetti.sway {
+  animation-name: confettiFall, confettiSway;
+  animation-timing-function: linear, ease-in-out;
+  animation-fill-mode: forwards, none;
+}
+
+.rain-star {
+  position: absolute;
+  top: -40px;
+  font-size: 26px;
+  animation-name: starRain;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 20px;
+  animation: sparkleOut 0.7s ease-out forwards;
+}
+
+@media (max-width: 1000px) {
+  .lessons {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .badge-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mini-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .lessons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: left;
+    padding: 26px;
+  }
+
+  .hero::after {
+    font-size: 18px;
+  }
+
+  .brand-title {
+    font-size: 21px;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .badge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  main#screen {
+    padding: 20px 14px 60px;
+  }
+
+  .lessons {
+    grid-template-columns: 1fr;
+  }
+
+  .answers {
+    grid-template-columns: 1fr;
+  }
+
+  .answer {
+    min-height: 64px;
+    font-size: 18px;
+  }
+
+  .hero-title {
+    font-size: 28px;
+  }
+
+  .topbar-inner {
+    padding: 11px 0;
+  }
+
+  .brand-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 25px;
+    border-radius: 15px;
+  }
+
+  .chip {
+    font-size: 15px;
+    padding: 9px 13px;
+  }
+
+  .icon-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 19px;
+  }
+
+  .quiz {
+    padding: 20px 16px;
+  }
+
+  .mini-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .finish {
+    padding: 26px 18px;
+  }
+
+  .stars {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-sub {
+    display: none;
+  }
+
+  .lesson-desc {
+    min-height: auto;
+  }
+}
+
+@media (min-width: 1300px) {
+  .wrap,
+  main#screen {
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar-inner {
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-text {
+    min-width: 0;
+  }
+
+  .topbar-right {
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
+    border-radius: 12px;
+  }
+
+  .chip {
+    padding: 8px 12px;
+    font-size: 15px;
+    gap: 6px;
+  }
+
+  .chip-label {
+    display: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .brand-sub {
+    display: none;
+  }
+
+  .brand-title {
+    font-size: 20px;
+  }
+
+  .topbar-right {
+    gap: 7px;
+  }
+
+  .toast {
+    font-size: 14px;
+    padding: 11px 15px;
+    max-width: 92vw;
+  }
+
+  .toast-icon {
+    font-size: 24px;
+  }
+
+  .hero::after {
+    display: none;
+  }
+
+  .mascot-body {
+    font-size: 62px;
+  }
+}
+
+@media (min-width: 1500px) {
+  .lessons {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .float-food {
+    display: none;
+  }
+}
+
+@media print {
+  .topbar,
+  footer,
+  .float-food,
+  #fx,
+  .hero-actions,
+  .finish-actions,
+  .quiz-actions {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  .quiz,
+  .panel,
+  .finish {
+    box-shadow: none;
+    border-color: #cccccc;
+  }
+}
+
+.toast {
+  position: fixed;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  border: 3px solid var(--honey);
+  box-shadow: var(--shadow-md);
+  font-size: 16px;
+  color: var(--cocoa);
+  animation: toastIn 0.5s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+}
+
+.toast-out {
+  animation: toastOut 0.45s ease forwards;
+}
+
+.toast-icon {
+  font-size: 30px;
+  animation: mascotBoing 1.6s ease-in-out infinite;
+}
+
+.toast-text b {
+  color: var(--carrot-dark);
+}
+
+.toast-tag {
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #ffffff;
+  background: var(--berry);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+}
+
+.hero-left {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-right {
+  position: relative;
+  z-index: 2;
+}
+
+.bonus {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--berry-soft);
+  color: var(--berry);
+  font-size: 13px;
+  font-weight: bold;
+  animation: popIn 0.4s ease both;
+}
+
+.panel + .panel {
+  margin-top: 0;
+}
+
+.quiz-top .streak {
+  margin-left: auto;
+}
+
+.finish-sub b {
+  color: var(--carrot-dark);
+}
+
+.lesson-card:focus-visible,
+.answer:focus-visible,
+.btn:focus-visible {
+  outline: 4px solid var(--berry);
+  outline-offset: 3px;
+}
+
+#worksheet {
+  display: none;
+}
+
+.ws-line {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.ws-note {
+  font-size: 12.5px;
+  color: #555555;
+  margin-bottom: 14px;
+}
+
+.ws-lesson {
+  margin: 18px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #999999;
+  font-size: 17px;
+}
+
+.ws-question {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dotted #bbbbbb;
+}
+
+.ws-number {
+  width: 26px;
+  font-weight: bold;
+}
+
+.ws-body {
+  flex: 1;
+}
+
+.ws-visual {
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+
+.ws-text {
+  margin-bottom: 3px;
+}
+
+.ws-choices {
+  font-size: 13.5px;
+  color: #333333;
+}
+
+.ws-box {
+  width: 34px;
+  height: 34px;
+  border: 2px solid #666666;
+  border-radius: 6px;
+}
+
+@media print {
+  .topbar,
+  footer,
+  #fx,
+  .fx-layer,
+  #screen,
+  .overlay {
+    display: none !important;
+  }
+
+  #worksheet {
+    display: block !important;
+    padding: 0 6mm;
+    color: #000000;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+}
+
+@keyframes toastIn {
+  0%   { opacity: 0; transform: translate(-50%, -40px) scale(0.9); }
+  70%  { opacity: 1; transform: translate(-50%, 6px) scale(1.02); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@keyframes toastOut {
+  0%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -30px) scale(0.94); }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="fx" aria-hidden="true"></div>
+
+<div class="fx-layer" id="bgLayer" aria-hidden="true"></div>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+
+      <button class="brand" onclick="goHome()" title="Go to the lesson list">
+        <span class="brand-icon" id="brandIcon">🍎</span>
+        <span class="brand-text">
+          <span class="brand-title">Yummy Math</span>
+          <span class="brand-sub">Grade 1 Food Math</span>
+        </span>
+      </button>
+
+      <div class="topbar-right">
+
+        <button class="icon-btn" id="muteBtn" onclick="toggleMute()" title="Turn the sounds on or off">
+          <span id="muteIcon">🔈</span>
+        </button>
+
+        <button class="icon-btn" onclick="showTrophy()" title="Open your trophy room">
+          <span>🏆</span>
+        </button>
+
+        <button class="icon-btn" onclick="openHowTo()" title="How to play">
+          <span>❓</span>
+        </button>
+
+        <div class="chip" id="pointsChip" title="Points you have earned">
+          <span class="chip-icon" id="chipIcon">🍪</span>
+          <span class="chip-label">Points:</span>
+          <span class="chip-value" id="pointsValue">0</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main id="screen" aria-live="polite"></main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-line">
+        🍎 <b>Yummy Math</b> • Count, Add, and Munch! 🥄
+      </div>
+      <div class="foot-tip">
+        Made for Grade 1 learners — practice a little every day and the numbers get easier.
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 class="modal-title" id="modalTitle">How to Play</h3>
+      <button class="modal-close" onclick="closeModal()" title="Close">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<script>
+
+var PRAISE = [
+  "Yummy! That is correct! 🎉",
+  "Delicious work! ⭐",
+  "You are a math chef! 👩‍🍳",
+  "Perfect bite! Well done! 🍰",
+  "Wonderful! Keep cooking! 🥳",
+  "That is exactly right! 🌟",
+  "Super smart! 🧠",
+  "Tasty answer! 🍩",
+  "Fantastic! High five! 🙌",
+  "Yes! You got it! 🍕"
+];
+
+var TRY_AGAIN = [
+  "Good try! The green one is the answer. 💚",
+  "Almost! Look at the green answer. 🌱",
+  "Nice effort! The green one is correct. 🍀",
+  "Keep going! Check the green answer. ✨",
+  "That is okay! Mistakes help us learn. 💛"
+];
+
+var FINISH_PERFECT = [
+  "PERFECT! Every single answer was right! 🏆",
+  "You did not miss a single one! Amazing! 🥇",
+  "A perfect score — the kitchen is proud of you! 👏"
+];
+
+var FINISH_GOOD = [
+  "Great job! Your math is looking delicious! 🍰",
+  "Well done! Practice one more time to get three stars! ⭐",
+  "Super work! You are getting better and better! 💪"
+];
+
+var FINISH_KEEP_GOING = [
+  "Nice start! Try again and your score will grow. 🌱",
+  "Every chef practices. Play again to earn more stars! 🍳",
+  "You finished! Let's try one more time together. 🤗"
+];
+
+var FUN_FACTS = [
+  "Did you know? A pizza is a circle, and a slice is a triangle! 🍕",
+  "Did you know? Honey never spoils — it can stay good for years! 🍯",
+  "Did you know? Apples float in water because they are one quarter air! 🍎",
+  "Did you know? A banana is a berry, but a strawberry is not! 🍌",
+  "Did you know? Carrots were purple before they were orange! 🥕",
+  "Did you know? Watermelon is 92 percent water! 🍉",
+  "Did you know? Most people can hold 10 fries in one hand? Try counting! 🍟",
+  "Did you know? A donut has a hole, which makes a perfect circle! 🍩",
+  "Did you know? You can count the seeds in an apple to guess the number 5! 🍏",
+  "Did you know? Milk and cookies were a snack invented by hungry students! 🍪",
+  "Did you know? Popcorn pops because the water inside turns to steam! 🍿",
+  "Did you know? A cherry has a stone inside, so it is not a true berry! 🍒"
+];
+
+var CHEF_LINES = [
+  "Counting is my favorite snack!",
+  "Let's cook up some numbers!",
+  "Tap a lesson and let's begin!",
+  "You are going to do great!",
+  "Numbers are tasty when they are fun!",
+  "Ready for a math snack?"
+];
+
+var CHEF_TIPS = [
+  "Count out loud and point at each picture. It helps your brain!",
+  "If a question feels hard, count again slowly — you can always try again.",
+  "Say the numbers in order: 1, 2, 3, 4, 5... you are doing math!",
+  "Use your fingers. Real chefs count with their hands too!",
+  "Ask a grown-up to play with you and take turns answering.",
+  "Stars are earned by finishing a lesson, not by being fast. Take your time!"
+];
+
+var BADGES = [
+  { id: "starter",  icon: "🥚", name: "First Bite",      need: 5,   kind: "points",  tip: "Earn 5 points" },
+  { id: "snacker",  icon: "🍪", name: "Snack Expert",    need: 25,  kind: "points",  tip: "Earn 25 points" },
+  { id: "luncher",  icon: "🥪", name: "Lunch Hero",      need: 50,  kind: "points",  tip: "Earn 50 points" },
+  { id: "dinner",   icon: "🍛", name: "Dinner Champion", need: 100, kind: "points",  tip: "Earn 100 points" },
+  { id: "feast",    icon: "🎂", name: "Feast Master",    need: 200, kind: "points",  tip: "Earn 200 points" },
+  { id: "explorer", icon: "🗺️", name: "Menu Explorer",   need: 3,   kind: "lessons", tip: "Finish 3 lessons" },
+  { id: "taster",   icon: "🍱", name: "Full Course",     need: 10,  kind: "lessons", tip: "Finish all 10 lessons" },
+  { id: "perfect1", icon: "🌟", name: "Perfect Plate",   need: 1,   kind: "perfect", tip: "Get every answer right in one lesson" },
+  { id: "perfect3", icon: "✨", name: "Triple Treat",    need: 3,   kind: "perfect", tip: "3 perfect lessons" },
+  { id: "streak3",  icon: "🔥", name: "On a Roll",       need: 3,   kind: "streak",  tip: "3 correct answers in a row" },
+  { id: "streak7",  icon: "🚀", name: "Hot Streak",      need: 7,   kind: "streak",  tip: "7 correct answers in a row" },
+  { id: "allstar",  icon: "👑", name: "Math Chef",       need: 10,  kind: "all",     tip: "Finish every lesson" }
+];
+
+var FOOD_CONFETTI = ["🍎", "🍕", "🍪", "🍩", "🍓", "🍌", "🧁", "🍟", "🍇", "🥕", "🍰", "🍿"];
+var STAR_CONFETTI = ["⭐", "🌟", "✨", "💫", "🏅", "🎉", "🎊", "🍬"];
+var BG_FOOD       = ["🍎", "🍕", "🍪", "🍩", "🍓", "🍌", "🧁", "🍟", "🥕", "🍇", "🍰", "🍿", "🥑", "🍉", "🥐", "🍯"];
+
+var CHEERS = ["Woohoo!", "Yummy!", "Amazing!", "Terrific!", "Delicious!", "Brilliant!"];
+
+var LESSONS = [
+
+  {
+    id: "count",
+    icon: "🍓",
+    title: "Snack Counting",
+    desc: "Count the snacks on the plate and learn your numbers.",
+    tone: 1,
+    questions: [
+      {
+        visual: "🍎 🍎 🍎 🍎",
+        text: "How many apples are in the basket?",
+        hint: "Point at each apple while you count: 1, 2, 3, 4.",
+        choices: ["4", "5", "3"],
+        answer: 0
+      },
+      {
+        visual: "🧁 🧁 🧁 🧁 🧁 🧁",
+        text: "How many cupcakes are on the plate?",
+        hint: "Count the cupcakes slowly: 1, 2, 3, 4, 5, 6.",
+        choices: ["5", "6", "7"],
+        answer: 1
+      },
+      {
+        visual: "🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟",
+        text: "How many fries are in the box?",
+        hint: "Count in two rows of four to make it easy.",
+        choices: ["7", "8", "9"],
+        answer: 1
+      },
+      {
+        visual: "🍓 🍓 🍓 🍓 🍓 🍓 🍓 🍓 🍓 🍓",
+        text: "How many strawberries are in the bowl?",
+        hint: "Count to ten: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+        choices: ["9", "10", "11"],
+        answer: 1
+      },
+      {
+        visual: "🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇",
+        text: "How many grapes are in the bunch?",
+        hint: "Ten grapes, then two more. Ten and two make twelve.",
+        choices: ["11", "12", "13"],
+        answer: 1
+      },
+      {
+        visual: "1  2  3  4  5  6  7  ❓",
+        text: "Which number comes after 7?",
+        hint: "Say the numbers in order and stop when you reach 7. What comes next?",
+        choices: ["6", "8", "9"],
+        answer: 1
+      },
+      {
+        visual: "9     3     7",
+        text: "Which number is the smallest?",
+        hint: "The smallest number is the one you say first when counting.",
+        choices: ["9", "3", "7"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "add",
+    icon: "🍕",
+    title: "Pizza Addition",
+    desc: "Put the food together and add the numbers.",
+    tone: 2,
+    questions: [
+      {
+        visual: "🍕🍕  ➕  🍕🍕",
+        text: "2 + 2 = ?",
+        hint: "Count all the pizza slices: 1, 2, 3, 4.",
+        choices: ["3", "4", "5"],
+        answer: 1
+      },
+      {
+        visual: "🍩🍩🍩  ➕  🍩🍩🍩🍩",
+        text: "3 + 4 = ?",
+        hint: "Start at 3 and count up four more: 4, 5, 6, 7.",
+        choices: ["7", "6", "8"],
+        answer: 0
+      },
+      {
+        visual: "🍓🍓🍓🍓🍓  ➕  🍓",
+        text: "5 + 1 = ?",
+        hint: "One more than 5 is the next number when you count.",
+        choices: ["5", "7", "6"],
+        answer: 2
+      },
+      {
+        visual: "🍌🍌  ➕  🍌🍌🍌🍌🍌",
+        text: "2 + 5 = ?",
+        hint: "Count the bananas: 2, then 3, 4, 5, 6, 7.",
+        choices: ["6", "7", "8"],
+        answer: 1
+      },
+      {
+        visual: "🍪🍪🍪🍪  ➕  🍪🍪🍪🍪",
+        text: "4 + 4 = ?",
+        hint: "Two groups of four cookies. Count them all: 1 to 8.",
+        choices: ["8", "9", "7"],
+        answer: 0
+      },
+      {
+        visual: "🧁🧁🧁🧁🧁🧁  ➕  🧁🧁🧁",
+        text: "6 + 3 = ?",
+        hint: "Start at 6 and count three more: 7, 8, 9.",
+        choices: ["8", "9", "10"],
+        answer: 1
+      },
+      {
+        visual: "🍇🍇🍇🍇🍇  ➕  🍇🍇🍇",
+        text: "You have 5 grapes. Mom gives you 3 more. How many grapes do you have now?",
+        hint: "Adding means putting together. Count all the grapes: 5 and 3 make...",
+        choices: ["7", "8", "9"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "subtract",
+    icon: "🍪",
+    title: "Cookie Take-Away",
+    desc: "Some cookies get eaten. Count how many are left.",
+    tone: 3,
+    questions: [
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪",
+        text: "5 − 1 = ?   (one cookie is eaten!)",
+        hint: "Start with 5 cookies and take one away. How many are left?",
+        choices: ["3", "4", "5"],
+        answer: 1
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪 🍪",
+        text: "6 − 2 = ?",
+        hint: "Take away two cookies from six and count what is left.",
+        choices: ["4", "3", "5"],
+        answer: 0
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪",
+        text: "8 − 3 = ?",
+        hint: "Count backwards from 8: 7, 6, 5.",
+        choices: ["4", "6", "5"],
+        answer: 2
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪 🍪 🍪",
+        text: "7 − 5 = ?",
+        hint: "Which number added to 5 makes 7? That is the answer.",
+        choices: ["1", "2", "3"],
+        answer: 1
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪",
+        text: "9 − 4 = ?",
+        hint: "Count backwards four steps from 9: 8, 7, 6, 5.",
+        choices: ["5", "4", "6"],
+        answer: 0
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪",
+        text: "10 − 6 = ?",
+        hint: "What number plus 6 makes 10? Count on your fingers.",
+        choices: ["3", "4", "5"],
+        answer: 1
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪 🍪 🍪 🍪 🍪",
+        text: "There are 8 cookies on the plate. You eat 2. How many cookies are left?",
+        hint: "Taking away is subtraction. 8 cookies minus 2 cookies leaves...",
+        choices: ["5", "6", "7"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "shapes",
+    icon: "🍩",
+    title: "Food Shapes",
+    desc: "Find the shapes hiding inside your favorite foods.",
+    tone: 4,
+    questions: [
+      {
+        visual: "🍕",
+        text: "A pizza slice looks like which shape?",
+        hint: "It has three sides and three pointy corners.",
+        choices: ["🔺 Triangle", "🟡 Circle", "🟦 Square"],
+        answer: 0
+      },
+      {
+        visual: "🍩",
+        text: "Which food is round like a circle?",
+        hint: "A circle is round with no corners at all.",
+        choices: ["🥪 Sandwich", "🍩 Donut", "🍫 Chocolate bar"],
+        answer: 1
+      },
+      {
+        visual: "🍞",
+        text: "A square slice of bread has how many sides?",
+        hint: "Count the sides of a square: top, bottom, left, right.",
+        choices: ["3", "5", "4"],
+        answer: 2
+      },
+      {
+        visual: "🔺 🧀",
+        text: "A triangle-shaped nacho chip has how many sides?",
+        hint: "Tri means three!",
+        choices: ["4", "3", "5"],
+        answer: 1
+      },
+      {
+        visual: "🍫",
+        text: "A chocolate bar is long on two sides and short on the other two. What shape is it?",
+        hint: "It is like a stretched square.",
+        choices: ["🔺 Triangle", "▭ Rectangle", "🟡 Circle"],
+        answer: 1
+      },
+      {
+        visual: "🔺",
+        text: "How many corners does a triangle have?",
+        hint: "Count the pointy places on the triangle.",
+        choices: ["2", "3", "4"],
+        answer: 1
+      },
+      {
+        visual: "🍞 🥐 🍇",
+        text: "A square has 4 sides that are all the same length. Which food is a square?",
+        hint: "Look for the food with four equal sides.",
+        choices: ["🍞 Square bread slice", "🥐 Croissant", "🍇 Grapes"],
+        answer: 0
+      }
+    ]
+  },
+
+  {
+    id: "patterns",
+    icon: "🍌",
+    title: "Fruit Patterns",
+    desc: "Look at the pattern and pick what comes next.",
+    tone: 5,
+    questions: [
+      {
+        visual: "🍌 🍎 🍌 🍎 ❓",
+        text: "What comes next in the pattern?",
+        hint: "The pattern goes banana, apple, banana, apple...",
+        choices: ["🍌 Banana", "🍎 Apple", "🍇 Grapes"],
+        answer: 0
+      },
+      {
+        visual: "🍓 🍓 🍇 🍓 🍓 ❓",
+        text: "What comes next?",
+        hint: "Two strawberries, then a grape. Two strawberries, then...",
+        choices: ["🍓 Strawberry", "🍇 Grapes", "🍊 Orange"],
+        answer: 1
+      },
+      {
+        visual: "🍕 🍕 🍪 🍕 🍕 ❓",
+        text: "What comes next?",
+        hint: "Say the pattern out loud: pizza, pizza, cookie, pizza, pizza...",
+        choices: ["🍕 Pizza", "🍪 Cookie", "🍩 Donut"],
+        answer: 1
+      },
+      {
+        visual: "🍎 🍊 🍌 🍎 🍊 ❓",
+        text: "What comes next?",
+        hint: "The pattern is apple, orange, banana, and then it starts again.",
+        choices: ["🍎 Apple", "🍊 Orange", "🍌 Banana"],
+        answer: 2
+      },
+      {
+        visual: "🧁 🍩 🍩 🧁 🍩 🍩 ❓",
+        text: "What comes next?",
+        hint: "One cupcake and two donuts keeps repeating.",
+        choices: ["🧁 Cupcake", "🍩 Donut", "🍪 Cookie"],
+        answer: 0
+      },
+      {
+        visual: "🥕 🥕 🥦 🥕 🥕 ❓",
+        text: "What comes next?",
+        hint: "Two carrots, then one broccoli. What comes after two carrots?",
+        choices: ["🥕 Carrot", "🥦 Broccoli", "🍅 Tomato"],
+        answer: 1
+      },
+      {
+        visual: "2, 4, 6, 8, ❓",
+        text: "This pattern counts by twos. What comes next?",
+        hint: "Add two each time: 2, 4, 6, 8, then two more.",
+        choices: ["9", "10", "12"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "compare",
+    icon: "🥕",
+    title: "More or Less",
+    desc: "Compare the plates and find out which has more.",
+    tone: 6,
+    questions: [
+      {
+        visual: "6     9     4",
+        text: "Which number is the biggest?",
+        hint: "The biggest number is the one you reach last when counting.",
+        choices: ["6", "9", "4"],
+        answer: 1
+      },
+      {
+        visual: "7     3     5",
+        text: "Which number is the smallest?",
+        hint: "The smallest number is the one you say first.",
+        choices: ["3", "5", "7"],
+        answer: 0
+      },
+      {
+        visual: "🍎 🍎 🍎 🍎 🍎",
+        text: "This plate has 5 apples. Which plate has more than 5?",
+        hint: "More means a bigger number than 5.",
+        choices: ["🍏 3 apples", "🍏 8 apples", "🍏 2 apples"],
+        answer: 1
+      },
+      {
+        visual: "10   ➕  7",
+        text: "Which number is bigger: 10 or 7?",
+        hint: "Count up to ten and then to seven. Which takes longer?",
+        choices: ["10", "7", "They are the same"],
+        answer: 0
+      },
+      {
+        visual: "2     8     5",
+        text: "Which number is the smallest?",
+        hint: "2 is very close to the start of counting.",
+        choices: ["2", "8", "5"],
+        answer: 0
+      },
+      {
+        visual: "🍎🍎🍎🍎🍎🍎   🍌🍌🍌🍌🍌🍌",
+        text: "There are 6 apples and 6 bananas. Which sentence is true?",
+        hint: "Count both groups carefully. Are they the same?",
+        choices: ["Apples have more", "They are equal", "Bananas have more"],
+        answer: 1
+      },
+      {
+        visual: "🍪 4    🍪 9    🍪 6",
+        text: "Which plate has the most cookies?",
+        hint: "Most means the biggest number of all three.",
+        choices: ["4 cookies", "9 cookies", "6 cookies"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "money",
+    icon: "🧁",
+    title: "Snack Shop Money",
+    desc: "Count coins to buy snacks at the little shop.",
+    tone: 7,
+    questions: [
+      {
+        visual: "🪙 ₱5   ➕   🪙 ₱5",
+        text: "How much money is ₱5 + ₱5?",
+        hint: "Two five-peso coins make ten pesos.",
+        choices: ["₱8", "₱10", "₱12"],
+        answer: 1
+      },
+      {
+        visual: "🪙 ₱10",
+        text: "How much is one ₱10 coin worth?",
+        hint: "Look at the number written on the coin.",
+        choices: ["₱1", "₱5", "₱10"],
+        answer: 2
+      },
+      {
+        visual: "🍬 ₱5   💵 ₱10",
+        text: "A candy costs ₱5. You pay with ₱10. How much change do you get?",
+        hint: "How much more is 10 than 5? Count up from 5 to 10.",
+        choices: ["₱3", "₱5", "₱10"],
+        answer: 1
+      },
+      {
+        visual: "🪙 ₱10   ➕   🪙 ₱1",
+        text: "How much money is ₱10 + ₱1?",
+        hint: "One more than ten is eleven.",
+        choices: ["₱10", "₱11", "₱12"],
+        answer: 1
+      },
+      {
+        visual: "🥤 ₱8      🍭 ₱3",
+        text: "A juice costs ₱8 and a lollipop costs ₱3. Which one is cheaper?",
+        hint: "Cheaper means the smaller amount of money.",
+        choices: ["₱3 lollipop", "₱8 juice", "They cost the same"],
+        answer: 0
+      },
+      {
+        visual: "🧃 ₱5   ➕   🪙 ₱5",
+        text: "A juice costs ₱5. You have two ₱5 coins. How many juices can you buy?",
+        hint: "Two five-peso coins are ten pesos. Each juice is five pesos.",
+        choices: ["2 juices", "1 juice", "3 juices"],
+        answer: 0
+      },
+      {
+        visual: "🪙 ₱5   ➕   🪙 ₱5   ➕   🪙 ₱1",
+        text: "How much money is ₱5 + ₱5 + ₱1?",
+        hint: "First add the two ₱5 coins, then add the ₱1 coin.",
+        choices: ["₱10", "₱11", "₱15"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "shares",
+    icon: "🍰",
+    title: "Fair Shares",
+    desc: "Cut the food in half and share it equally.",
+    tone: 8,
+    questions: [
+      {
+        visual: "🍕 🍕",
+        text: "A pizza is cut into 2 equal pieces. One piece is how much of the pizza?",
+        hint: "When a whole is cut into two equal parts, each part is one half.",
+        choices: ["One half", "One whole", "Three halves"],
+        answer: 0
+      },
+      {
+        visual: "🍪 🍪 🍪 🍪   👦 👧",
+        text: "You have 4 cookies and 2 friends. Share them equally. How many does each friend get?",
+        hint: "Give one cookie to each friend again and again until all are shared.",
+        choices: ["1 cookie", "2 cookies", "4 cookies"],
+        answer: 1
+      },
+      {
+        visual: "🍓 🍓 🍓 🍓 🍓 🍓",
+        text: "What is half of 6 strawberries?",
+        hint: "Half means two equal groups. Share 6 into two equal groups.",
+        choices: ["2", "3", "4"],
+        answer: 1
+      },
+      {
+        visual: "🍬 🍬 🍬 🍬 🍬 🍬 🍬 🍬 🍬 🍬",
+        text: "What is half of 10 candies?",
+        hint: "Share the 10 candies into two equal piles and count one pile.",
+        choices: ["4", "5", "6"],
+        answer: 1
+      },
+      {
+        visual: "🍕🍕   🍕🍕🍕   🍕",
+        text: "Which picture shows two equal halves of a pizza?",
+        hint: "Equal means both pieces are the same size.",
+        choices: ["Two equal slices", "Three slices", "One whole slice"],
+        answer: 0
+      },
+      {
+        visual: "🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇   👦 👧",
+        text: "Share 8 grapes equally between 2 children. How many grapes does each child get?",
+        hint: "Give one grape to each child, over and over, then count one child's pile.",
+        choices: ["3 grapes", "4 grapes", "5 grapes"],
+        answer: 1
+      },
+      {
+        visual: "🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟",
+        text: "What is half of 12 fries?",
+        hint: "Half of 12 is the number that doubles to make 12.",
+        choices: ["5", "6", "7"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "skip",
+    icon: "🍬",
+    title: "Skip Counting",
+    desc: "Count by twos, fives and tens with your candies.",
+    tone: 9,
+    questions: [
+      {
+        visual: "2, 4, 6, ❓",
+        text: "Count by twos. What comes next?",
+        hint: "Add 2 to 6.",
+        choices: ["7", "8", "9"],
+        answer: 1
+      },
+      {
+        visual: "5, 10, 15, ❓",
+        text: "Count by fives. What comes next?",
+        hint: "Add 5 to 15. Think of a clock: 15 and five more.",
+        choices: ["20", "25", "16"],
+        answer: 0
+      },
+      {
+        visual: "10, 20, 30, ❓",
+        text: "Count by tens. What comes next?",
+        hint: "Add 10 to 30.",
+        choices: ["40", "35", "50"],
+        answer: 0
+      },
+      {
+        visual: "🍬🍬   🍬🍬   🍬🍬   🍬🍬",
+        text: "You have 4 pairs of candies. How many candies in all?",
+        hint: "Count by twos: 2, 4, 6, 8.",
+        choices: ["6", "8", "10"],
+        answer: 1
+      },
+      {
+        visual: "5, 10, 15, 20, ❓",
+        text: "Count by fives. What comes next?",
+        hint: "Add 5 to 20.",
+        choices: ["24", "25", "30"],
+        answer: 1
+      },
+      {
+        visual: "20, 30, 40, ❓",
+        text: "Count by tens. What comes next?",
+        hint: "Add 10 to 40.",
+        choices: ["45", "50", "60"],
+        answer: 1
+      },
+      {
+        visual: "🍭🍭   🍭🍭   🍭🍭",
+        text: "Count by twos to find all the lollipops: 2, 4, ❓",
+        hint: "Two more than 4.",
+        choices: ["5", "6", "7"],
+        answer: 1
+      }
+    ]
+  },
+
+  {
+    id: "time",
+    icon: "🕐",
+    title: "Snack Time",
+    desc: "Read the clock and put the meals in order.",
+    tone: 10,
+    questions: [
+      {
+        visual: "🕒",
+        text: "The clock shows snack time. What time is it?",
+        hint: "The short hand points to the number of the hour.",
+        choices: ["2 o'clock", "3 o'clock", "4 o'clock"],
+        answer: 1
+      },
+      {
+        visual: "🍳 ➡️ ❓ ➡️ 🍽️",
+        text: "Breakfast comes first, then what meal comes next?",
+        hint: "Think about the meals you eat in one day, in order.",
+        choices: ["Lunch", "Dinner", "Bedtime snack"],
+        answer: 0
+      },
+      {
+        visual: "🕐 1 ... 12",
+        text: "How many numbers are on a clock face?",
+        hint: "Say the numbers around a clock: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12.",
+        choices: ["10", "12", "6"],
+        answer: 1
+      },
+      {
+        visual: "🕗    🕛",
+        text: "Which time comes first in the morning: 8 o'clock or 12 o'clock?",
+        hint: "Morning comes before noon.",
+        choices: ["8 o'clock", "12 o'clock", "They are the same"],
+        answer: 0
+      },
+      {
+        visual: "🍽️ ➡️ ❓",
+        text: "After lunch, what snack time comes next?",
+        hint: "The day goes: breakfast, lunch, then a snack, then dinner.",
+        choices: ["Afternoon snack", "Breakfast", "Midnight snack"],
+        answer: 0
+      },
+      {
+        visual: "🕔 5 o'clock",
+        text: "Which clock shows 5 o'clock?",
+        hint: "Look for the clock with the short hand on the 5.",
+        choices: ["🕓 4 o'clock", "🕔 5 o'clock", "🕖 7 o'clock"],
+        answer: 1
+      },
+      {
+        visual: "🍪 🕓",
+        text: "Snack time is at 4 o'clock. You finish at 5 o'clock. How long was snack time?",
+        hint: "Count the hours from 4 to 5.",
+        choices: ["1 hour", "2 hours", "3 hours"],
+        answer: 0
+      }
+    ]
+  }
+
+];
+
+var STORE_KEY = "yummyMathDeluxeV1";
+
+var currentScreen = "home";
+
+var game = null;
+
+function el(id) {
+  return document.getElementById(id);
+}
+
+function randInt(low, high) {
+  return Math.floor(Math.random() * (high - low + 1)) + low;
+}
+
+function pick(list) {
+  return list[randInt(0, list.length - 1)];
+}
+
+function esc(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function percent(part, whole) {
+  if (!whole) {
+    return 0;
+  }
+  return Math.round((part / whole) * 100);
+}
+
+function starRow(filled, total) {
+  var text = "";
+  for (var i = 0; i < total; i++) {
+    text += (i < filled) ? "⭐" : "☆";
+  }
+  return text;
+}
+
+function starsFor(correct, total) {
+  var ratio = total ? correct / total : 0;
+  if (ratio >= 1) {
+    return 3;
+  }
+  if (ratio >= 0.6) {
+    return 2;
+  }
+  return 1;
+}
+
+function findLesson(id) {
+  for (var i = 0; i < LESSONS.length; i++) {
+    if (LESSONS[i].id === id) {
+      return LESSONS[i];
+    }
+  }
+  return null;
+}
+
+function nextLesson(id) {
+  for (var i = 0; i < LESSONS.length; i++) {
+    if (LESSONS[i].id === id && i + 1 < LESSONS.length) {
+      return LESSONS[i + 1];
+    }
+  }
+  return null;
+}
+
+function questionsOf(lesson) {
+  var extra = [];
+  if (typeof EXTRA_QUESTIONS !== "undefined" && EXTRA_QUESTIONS[lesson.id]) {
+    extra = EXTRA_QUESTIONS[lesson.id];
+  }
+  return lesson.questions.concat(extra);
+}
+
+var DEFAULT_STATE = {
+  points: 0,
+  best: {},
+  plays: {},
+  badges: [],
+  maxStreak: 0,
+  muted: false,
+  visits: 0
+};
+
+var state = DEFAULT_STATE;
+
+function safeRead(key, fallback) {
+  try {
+    var raw = window.localStorage.getItem(key);
+    if (!raw) {
+      return fallback;
+    }
+    return JSON.parse(raw);
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function safeWrite(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+
+  }
+}
+
+function loadState() {
+  var saved = safeRead(STORE_KEY, null);
+  var fresh = {};
+  var key;
+
+  for (key in DEFAULT_STATE) {
+    if (Object.prototype.hasOwnProperty.call(DEFAULT_STATE, key)) {
+      fresh[key] = DEFAULT_STATE[key];
+    }
+  }
+
+  if (saved && typeof saved === "object") {
+    for (key in fresh) {
+      if (Object.prototype.hasOwnProperty.call(saved, key)) {
+        fresh[key] = saved[key];
+      }
+    }
+  }
+
+  if (typeof fresh.best !== "object" || fresh.best === null) {
+    fresh.best = {};
+  }
+  if (typeof fresh.plays !== "object" || fresh.plays === null) {
+    fresh.plays = {};
+  }
+  if (typeof fresh.badges !== "object" || fresh.badges === null) {
+    fresh.badges = [];
+  }
+  if (typeof fresh.points !== "number" || isNaN(fresh.points)) {
+    fresh.points = 0;
+  }
+  if (typeof fresh.maxStreak !== "number" || isNaN(fresh.maxStreak)) {
+    fresh.maxStreak = 0;
+  }
+  if (typeof fresh.muted !== "boolean") {
+    fresh.muted = false;
+  }
+
+  state = fresh;
+  return state;
+}
+
+function saveState() {
+  safeWrite(STORE_KEY, state);
+}
+
+function lessonsFinished() {
+  return Object.keys(state.plays).length;
+}
+
+function perfectLessons() {
+  var count = 0;
+  for (var i = 0; i < LESSONS.length; i++) {
+    var lesson = LESSONS[i];
+    var total = questionsOf(lesson).length;
+    if (state.best[lesson.id] === total && total > 0) {
+      count++;
+    }
+  }
+  return count;
+}
+
+function updateChip(animate) {
+  var value = el("pointsValue");
+  if (!value) {
+    return;
+  }
+  value.textContent = state.points;
+
+  if (animate) {
+    var chip = el("pointsChip");
+    if (chip) {
+      chip.classList.remove("pop");
+      void chip.offsetWidth;
+      chip.classList.add("pop");
+    }
+  }
+}
+
+function addPoints(amount) {
+  state.points += amount;
+  saveState();
+  updateChip(true);
+}
+
+function goHome() {
+  currentScreen = "home";
+  game = null;
+  renderHome();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderHome() {
+  var cards = "";
+  var index = 0;
+  var i;
+
+  for (i = 0; i < LESSONS.length; i++) {
+    var lesson = LESSONS[i];
+    var total = questionsOf(lesson).length;
+    var best = state.best[lesson.id] || 0;
+    var stars = starsFor(best, total);
+    var finished = state.plays[lesson.id] > 0;
+    var perfect = best === total && total > 0;
+    var foot;
+    var ribbon;
+
+    if (finished || best > 0) {
+      foot = '<span class="lesson-best">Best: ' + starRow(stars, 3) + '</span>';
+    } else {
+      foot = '<span class="lesson-best fresh">New! Tap to play 👆</span>';
+    }
+
+    ribbon = perfect ? '<span class="lesson-ribbon">PERFECT</span>' : "";
+    index++;
+
+    cards +=
+      '<button class="lesson-card tone-' + lesson.tone + ' card-in d' + (index < 20 ? index : 20) + '"' +
+      ' onclick="startLesson(\'' + lesson.id + '\')">' +
+        ribbon +
+        '<span class="lesson-icon">' + lesson.icon + '</span>' +
+        '<span class="lesson-title">' + esc(lesson.title) + '</span>' +
+        '<span class="lesson-desc">' + esc(lesson.desc) + '</span>' +
+        '<span class="lesson-foot">' + foot + '<span class="lesson-go">Open →</span></span>' +
+      '</button>';
+  }
+
+  var tip = pick(CHEF_TIPS);
+  var chefLine = pick(CHEF_LINES);
+
+  el("screen").innerHTML =
+    '<section class="hero rise-in">' +
+      '<div class="hero-left">' +
+        '<span class="hero-eyebrow">Welcome, little chef! 👋</span>' +
+        '<h2 class="hero-title">Let\'s Make Math Yummy!</h2>' +
+        '<p class="hero-text">Choose a food lesson below and answer the questions. ' +
+        'Every correct answer gives you points, and finishing a lesson gives you stars.</p>' +
+        '<div class="hero-actions">' +
+          '<button class="btn btn-primary btn-big" onclick="scrollToLessons()">🍴 Start Learning</button>' +
+          '<button class="btn btn-secondary" onclick="printWorksheet()">🖨️ Print a worksheet</button>' +
+          '<button class="btn btn-ghost" onclick="openHowTo()">❓ How to play</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="hero-right">' +
+        '<div class="mascot">' +
+          '<div class="mascot-body">🧑‍🍳</div>' +
+          '<div class="mascot-shadow"></div>' +
+          '<div class="mascot-name">Chef Coco</div>' +
+          '<div class="bubble">' + esc(chefLine) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</section>' +
+
+    '<div class="section-head" id="lessonList">' +
+      '<h2 class="section-title"><span class="emoji">🍴</span> My Food Math Lessons</h2>' +
+      '<span class="section-note">' + LESSONS.length + ' lessons • ' + countAllQuestions() + ' questions</span>' +
+    '</div>' +
+
+    '<div class="lessons">' + cards + '</div>' +
+
+    '<div class="tip rise-in d6">' +
+      '<span class="tip-icon">💡</span>' +
+      '<span><b>Chef Tip:</b> ' + esc(tip) + '</span>' +
+    '</div>';
+
+  attachRipples();
+}
+
+function countAllQuestions() {
+  var total = 0;
+  for (var i = 0; i < LESSONS.length; i++) {
+    total += questionsOf(LESSONS[i]).length;
+  }
+  return total;
+}
+
+function scrollToLessons() {
+  var list = el("lessonList");
+  if (list) {
+    list.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function startLesson(id) {
+  var lesson = findLesson(id);
+  if (!lesson) {
+    return;
+  }
+
+  game = {
+    lesson: lesson,
+    list: questionsOf(lesson),
+    index: 0,
+    correct: 0,
+    streak: 0,
+    earned: 0,
+    answered: false,
+    picked: -1,
+    streakBonus: 0
+  };
+
+  currentScreen = "quiz";
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function plaqueHTML(visual) {
+  var parts = String(visual).split(/\s+/);
+  var out = "";
+  var i;
+
+  for (i = 0; i < parts.length; i++) {
+    if (!parts[i]) {
+      continue;
+    }
+    out += '<span style="animation-delay:' + (i * 0.13).toFixed(2) + 's">' + esc(parts[i]) + '</span> ';
+  }
+
+  return '<div class="plaque"><div class="plaque-food">' + out + '</div></div>';
+}
+
+function renderQuestion() {
+  var question = game.list[game.index];
+  var total = game.list.length;
+  var barWidth = percent(game.index + 1, total);
+  var answersHTML = "";
+  var letters = ["A", "B", "C", "D"];
+  var i;
+
+  for (i = 0; i < question.choices.length; i++) {
+    answersHTML +=
+      '<button class="answer" id="answer-' + i + '" onclick="chooseAnswer(' + i + ')">' +
+        '<span class="answer-key">' + letters[i] + '</span>' +
+        '<span>' + esc(question.choices[i]) + '</span>' +
+      '</button>';
+  }
+
+  el("screen").innerHTML =
+    '<div class="quiz" id="quizCard">' +
+      '<div class="quiz-top">' +
+        '<div class="quiz-title">' +
+          '<span>' + game.lesson.icon + '</span>' +
+          '<span>' + esc(game.lesson.title) + '</span>' +
+        '</div>' +
+        '<span class="quiz-count">Question ' + (game.index + 1) + ' of ' + total + '</span>' +
+        '<span class="streak" id="streakPill">' +
+          '<span class="streak-fire">🔥</span> <span id="streakText">0 in a row</span>' +
+        '</span>' +
+      '</div>' +
+
+      '<div class="bar"><div class="bar-fill" id="barFill" style="width:' + barWidth + '%"></div></div>' +
+
+      (question.visual ? plaqueHTML(question.visual) : "") +
+
+      '<h2 class="question">' + esc(question.text) + '</h2>' +
+
+      '<div class="answers" id="answers">' + answersHTML + '</div>' +
+
+      '<div class="feedback" id="feedback"></div>' +
+
+      '<div class="quiz-actions">' +
+        '<button class="btn btn-ghost btn-sm" onclick="goHome()">← Lessons</button>' +
+        '<div class="right">' +
+          '<button class="btn btn-secondary" id="hintBtn" onclick="showHint()">💡 Hint</button>' +
+          '<button class="btn btn-mint" id="nextBtn" onclick="goNext()" style="visibility:hidden">Next ➜</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  updateStreakPill();
+  attachRipples();
+}
+
+function updateStreakPill() {
+  var pill = el("streakPill");
+  var text = el("streakText");
+  if (!pill || !text) {
+    return;
+  }
+
+  if (game && game.streak >= 2) {
+    text.textContent = game.streak + " in a row";
+    pill.classList.add("show");
+  } else {
+    pill.classList.remove("show");
+  }
+}
+
+function showHint() {
+  var question = game.list[game.index];
+  var feedback = el("feedback");
+
+  feedback.className = "feedback no show";
+  feedback.innerHTML = '<span class="big">💡</span><span>' + esc(question.hint) + '</span>';
+  sfxPop();
+}
+
+function chooseAnswer(picked) {
+  if (!game || game.answered) {
+    return;
+  }
+
+  var question = game.list[game.index];
+  var isRight = (picked === question.answer);
+  var buttons = document.querySelectorAll(".answer");
+  var i;
+
+  game.answered = true;
+  game.picked = picked;
+
+  for (i = 0; i < buttons.length; i++) {
+    buttons[i].setAttribute("disabled", "disabled");
+    if (i !== question.answer && i !== picked) {
+      buttons[i].classList.add("dimmed");
+    }
+  }
+
+  var correctButton = el("answer-" + question.answer);
+  if (correctButton) {
+    correctButton.classList.add("correct");
+  }
+
+  if (isRight) {
+
+    var bonus = (game.streak >= 2) ? 2 : 0;
+    game.correct++;
+    game.streak++;
+    game.earned += 5 + bonus;
+    game.streakBonus += bonus;
+
+    if (game.streak > state.maxStreak) {
+      state.maxStreak = game.streak;
+    }
+
+    addPoints(5 + bonus);
+
+    var praise = pick(PRAISE);
+    var bonusLine = bonus ? ' <span class="bonus">+2 streak bonus!</span>' : "";
+
+    el("feedback").className = "feedback ok show";
+    el("feedback").innerHTML =
+      '<span class="big">🎉</span><span>' + esc(praise) + ' (+' + (5 + bonus) + ' points)' + bonusLine + '</span>';
+
+    sfxCorrect();
+    burstConfetti(14, FOOD_CONFETTI);
+    sparkleBurst(70);
+  } else {
+    game.streak = 0;
+
+    var forgive = pick(TRY_AGAIN);
+    el("feedback").className = "feedback no show";
+    el("feedback").innerHTML = '<span class="big">🙂</span><span>' + esc(forgive) + '</span>';
+
+    var wrongButton = el("answer-" + picked);
+    if (wrongButton) {
+      wrongButton.classList.add("wrong");
+    }
+
+    sfxWrong();
+    shiverCard();
+  }
+
+  updateStreakPill();
+  checkBadges(false);
+
+  var nextButton = el("nextBtn");
+  if (nextButton) {
+    nextButton.style.visibility = "visible";
+    nextButton.classList.add("pulse-ready");
+  }
+
+  var hintButton = el("hintBtn");
+  if (hintButton) {
+    hintButton.setAttribute("disabled", "disabled");
+  }
+}
+
+function shiverCard() {
+  var card = el("quizCard");
+  if (!card) {
+    return;
+  }
+  card.classList.remove("shiver");
+  void card.offsetWidth;
+  card.classList.add("shiver");
+}
+
+function goNext() {
+  if (!game || !game.answered) {
+    return;
+  }
+
+  sfxClick();
+
+  game.index++;
+  game.answered = false;
+  game.picked = -1;
+
+  if (game.index < game.list.length) {
+    renderQuestion();
+  } else {
+    finishLesson();
+  }
+}
+
+function finishLesson() {
+  var lesson = game.lesson;
+  var total = game.list.length;
+  var correct = game.correct;
+  var stars = starsFor(correct, total);
+  var best = state.best[lesson.id] || 0;
+  var newBadges;
+  var headline;
+  var badgeFace;
+  var starsHTML = "";
+  var badgesHTML = "";
+  var nextButton;
+  var i;
+
+  if (correct > best) {
+    state.best[lesson.id] = correct;
+  }
+  state.plays[lesson.id] = (state.plays[lesson.id] || 0) + 1;
+  saveState();
+
+  newBadges = checkBadges(true);
+
+  if (correct === total) {
+    headline = pick(FINISH_PERFECT);
+    badgeFace = "🏆";
+  } else if (percent(correct, total) >= 60) {
+    headline = pick(FINISH_GOOD);
+    badgeFace = "🎉";
+  } else {
+    headline = pick(FINISH_KEEP_GOING);
+    badgeFace = "🌱";
+  }
+
+  for (i = 0; i < 3; i++) {
+    starsHTML +=
+      '<span class="star' + (i < stars ? " on" : "") + ' d' + (i + 1) + '">' +
+        (i < stars ? "⭐" : "☆") +
+      '</span>';
+  }
+
+  if (newBadges.length) {
+    badgesHTML += '<div class="new-badges">';
+    for (i = 0; i < newBadges.length; i++) {
+      badgesHTML +=
+        '<span class="badge-pill d' + (i + 1) + '">' +
+          '<span>' + newBadges[i].icon + '</span>' +
+          '<span>' + esc(newBadges[i].name) + '</span>' +
+          '<span class="tag">NEW BADGE</span>' +
+        '</span>';
+    }
+    badgesHTML += '</div>';
+  }
+
+  var next = nextLesson(lesson.id);
+
+  if (next) {
+    nextButton =
+      '<button class="btn btn-mint btn-big" onclick="startLesson(\'' + next.id + '\')">' +
+        next.icon + ' Next lesson →' +
+      '</button>';
+  } else {
+    nextButton = '<button class="btn btn-mint btn-big" onclick="showTrophy()">🏆 See my badges</button>';
+  }
+
+  el("screen").innerHTML =
+    '<div class="finish">' +
+      '<div class="finish-badge">' + badgeFace + '</div>' +
+      '<h2 class="finish-title">' + esc(pick(CHEERS)) + '</h2>' +
+      '<p class="finish-sub">' + esc(headline) + '</p>' +
+
+      '<div class="stars">' + starsHTML + '</div>' +
+
+      '<div class="points-earned">' +
+        '<span>🍪</span><span>You earned ' + game.earned + ' points</span>' +
+      '</div>' +
+
+      '<p class="finish-sub">You answered <b>' + correct + ' of ' + total +
+        '</b> questions correctly in <b>' + esc(lesson.title) + '</b>.<br>' +
+        'Your best score here is <b>' + state.best[lesson.id] + ' of ' + total + '</b>.</p>' +
+
+      (game.streakBonus ? '<p class="finish-note">🔥 You also earned ' + game.streakBonus + ' extra points from streaks!</p>' : "") +
+
+      badgesHTML +
+
+      '<div class="finish-actions">' +
+        '<button class="btn btn-primary btn-big" onclick="startLesson(\'' + lesson.id + '\')">🔁 Play again</button>' +
+        nextButton +
+        '<button class="btn btn-secondary" onclick="goHome()">🏠 All lessons</button>' +
+        '<button class="btn btn-ghost" onclick="printWorksheet(\'' + lesson.id + '\')">🖨️ Worksheet</button>' +
+      '</div>' +
+
+      '<p class="finish-note">💡 ' + esc(pick(FUN_FACTS)) + '</p>' +
+    '</div>';
+
+  burstConfetti(46, FOOD_CONFETTI);
+  starRain(26);
+  sfxWin();
+  attachRipples();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showTrophy() {
+  currentScreen = "trophy";
+  sfxClick();
+
+  var tiles = "";
+  var rows = "";
+  var i;
+
+  for (i = 0; i < BADGES.length; i++) {
+    var badge = BADGES[i];
+    var owned = state.badges.indexOf(badge.id) !== -1;
+
+    tiles +=
+      '<div class="badge-tile' + (owned ? "" : " locked") + ' card-in d' + ((i % 20) + 1) + '">' +
+        '<div class="badge-icon">' + (owned ? badge.icon : "🔒") + '</div>' +
+        '<div class="badge-name">' + esc(badge.name) + '</div>' +
+        '<div class="badge-need">' + (owned ? "Earned!" : esc(badge.tip)) + '</div>' +
+      '</div>';
+  }
+
+  for (i = 0; i < LESSONS.length; i++) {
+    var lesson = LESSONS[i];
+    var total = questionsOf(lesson).length;
+    var best = state.best[lesson.id] || 0;
+
+    rows +=
+      '<div class="best-row">' +
+        '<span class="row-icon">' + lesson.icon + '</span>' +
+        '<span class="row-name">' + esc(lesson.title) + '</span>' +
+        '<span class="row-stars">' + starRow(starsFor(best, total), 3) + '</span>' +
+        '<span class="row-empty">' +
+          (state.plays[lesson.id] ? ("played " + state.plays[lesson.id] + "×") : "not played yet") +
+        '</span>' +
+      '</div>';
+  }
+
+  el("screen").innerHTML =
+    '<div class="trophy">' +
+      '<div class="panel rise-in">' +
+        '<h2 class="panel-title">🏆 My Trophy Room</h2>' +
+        '<p class="finish-sub">' +
+          'Points: <b>' + state.points + '</b> • ' +
+          'Badges: <b>' + state.badges.length + ' of ' + BADGES.length + '</b> • ' +
+          'Lessons finished: <b>' + lessonsFinished() + ' of ' + LESSONS.length + '</b> • ' +
+          'Longest streak: <b>' + state.maxStreak + '</b>' +
+        '</p>' +
+        '<div class="mini-cards">' +
+          '<div class="mini-card">' +
+            '<div class="mini-icon">🍪</div>' +
+            '<h4>Points</h4>' +
+            '<p>Earn 5 for every correct answer, plus 2 extra when you are on a streak.</p>' +
+          '</div>' +
+          '<div class="mini-card">' +
+            '<div class="mini-icon">⭐</div>' +
+            '<h4>Stars</h4>' +
+            '<p>Finish a lesson to earn 1, 2 or 3 stars for your best score.</p>' +
+          '</div>' +
+          '<div class="mini-card">' +
+            '<div class="mini-icon">🎖️</div>' +
+            '<h4>Badges</h4>' +
+            '<p>Collect all ' + BADGES.length + ' badges by playing and practicing.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="panel rise-in d2">' +
+        '<h2 class="panel-title">🎖️ My Badges</h2>' +
+        '<div class="badge-grid">' + tiles + '</div>' +
+      '</div>' +
+
+      '<div class="panel rise-in d4">' +
+        '<h2 class="panel-title">📗 My Lesson Scores</h2>' +
+        '<div class="best-list">' + rows + '</div>' +
+      '</div>' +
+
+      '<div class="panel rise-in d6" style="text-align:center">' +
+        '<button class="btn btn-primary btn-big" onclick="goHome()">🏠 Back to the lessons</button>' +
+        '<button class="btn btn-secondary" onclick="printWorksheet()" style="margin-left:10px">🖨️ Print a worksheet</button>' +
+        '<button class="btn btn-ghost" onclick="askReset()" style="margin-left:10px">🧽 Start fresh</button>' +
+      '</div>' +
+    '</div>';
+
+  attachRipples();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function askReset() {
+  openModal(
+    "🧽 Start fresh?",
+    '<p>This will erase the points, stars and badges saved on this computer.</p>' +
+    '<p><b>This cannot be undone.</b></p>',
+    '<button class="btn btn-berry" onclick="doReset()">Yes, erase everything</button>' +
+    '<button class="btn btn-ghost" onclick="closeModal()" style="margin-left:10px">No, keep my scores</button>'
+  );
+}
+
+function doReset() {
+  state = {
+    points: 0,
+    best: {},
+    plays: {},
+    badges: [],
+    maxStreak: 0,
+    muted: state.muted,
+    visits: state.visits
+  };
+  saveState();
+  updateChip(true);
+  closeModal();
+  goHome();
+}
+
+function checkBadges(showNow) {
+  var earned = [];
+  var i;
+
+  for (i = 0; i < BADGES.length; i++) {
+    var badge = BADGES[i];
+    var already = state.badges.indexOf(badge.id) !== -1;
+    var gotIt = false;
+
+    if (already) {
+      continue;
+    }
+
+    if (badge.kind === "points" && state.points >= badge.need) {
+      gotIt = true;
+    } else if (badge.kind === "lessons" && lessonsFinished() >= badge.need) {
+      gotIt = true;
+    } else if (badge.kind === "perfect" && perfectLessons() >= badge.need) {
+      gotIt = true;
+    } else if (badge.kind === "streak" && state.maxStreak >= badge.need) {
+      gotIt = true;
+    } else if (badge.kind === "all" && lessonsFinished() >= LESSONS.length) {
+      gotIt = true;
+    }
+
+    if (gotIt) {
+      state.badges.push(badge.id);
+      earned.push(badge);
+    }
+  }
+
+  if (earned.length) {
+    saveState();
+    if (!showNow) {
+      showBadgeToast(earned[0]);
+      sfxBadge();
+    }
+  }
+
+  return earned;
+}
+
+function showBadgeToast(badge) {
+  var toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML =
+    '<span class="toast-icon">' + badge.icon + '</span>' +
+    '<span class="toast-text">New badge: <b>' + esc(badge.name) + '</b></span>' +
+    '<span class="toast-tag">NEW</span>';
+
+  document.body.appendChild(toast);
+
+  setTimeout(function () {
+    toast.classList.add("toast-out");
+    setTimeout(function () {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 500);
+  }, 2600);
+}
+
+function openModal(title, bodyHTML, footHTML) {
+  el("modalTitle").innerHTML = title;
+  el("modalBody").innerHTML = bodyHTML;
+  el("modalFoot").innerHTML = footHTML || "";
+  el("overlay").classList.add("show");
+  sfxPop();
+}
+
+function closeModal() {
+  el("overlay").classList.remove("show");
+}
+
+function overlayClick(event) {
+  if (event.target && event.target.id === "overlay") {
+    closeModal();
+  }
+}
+
+function openHowTo() {
+  openModal(
+    "❓ How to Play",
+    '<p>Welcome to <b>Yummy Math</b>! Here is how it works:</p>' +
+    '<ol>' +
+      '<li><b>Pick a lesson</b> from the colorful cards on the first page. Each one is about food.</li>' +
+      '<li><b>Read the question</b> and look at the food pictures above it.</li>' +
+      '<li><b>Tap an answer</b> — the three big buttons are A, B and C. You can also press the keys 1, 2 or 3.</li>' +
+      '<li>If you are not sure, tap <b>💡 Hint</b> for a small clue. It does not take away your points.</li>' +
+      '<li>Every correct answer gives you <b>5 points</b>, and <b>2 bonus points</b> when you are on a streak.</li>' +
+      '<li>When the lesson ends you earn <b>1, 2 or 3 stars</b> for your best score, and maybe a <b>new badge</b>!</li>' +
+      '<li>Your points, stars and badges are kept in this browser, so you can come back later.</li>' +
+    '</ol>' +
+    '<p>Have fun, little chef! 🍳</p>',
+    '<button class="btn btn-primary" onclick="closeModal()">Let\'s cook! 🍽️</button>'
+  );
+}
+
+var audioCtx = null;
+
+function initAudio() {
+  try {
+    var Ctor = window.AudioContext || window.webkitAudioContext;
+    if (!Ctor) {
+      return;
+    }
+    if (!audioCtx) {
+      audioCtx = new Ctor();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+  } catch (error) {
+    audioCtx = null;
+  }
+}
+
+function tone(frequency, startAfter, length, type, volume) {
+  if (!audioCtx || state.muted) {
+    return;
+  }
+  try {
+    var now = audioCtx.currentTime + startAfter;
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+
+    osc.type = type || "sine";
+    osc.frequency.value = frequency;
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(volume || 0.16, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + length);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + length + 0.03);
+  } catch (error) {
+
+  }
+}
+
+function sfxClick() {
+  initAudio();
+  tone(620, 0, 0.09, "triangle", 0.10);
+}
+
+function sfxPop() {
+  initAudio();
+  tone(880, 0, 0.07, "sine", 0.09);
+  tone(1180, 0.06, 0.08, "sine", 0.07);
+}
+
+function sfxCorrect() {
+  initAudio();
+  tone(660, 0, 0.12, "triangle", 0.14);
+  tone(990, 0.10, 0.16, "triangle", 0.13);
+}
+
+function sfxWrong() {
+  initAudio();
+  tone(300, 0, 0.18, "sine", 0.12);
+  tone(240, 0.14, 0.20, "sine", 0.10);
+}
+
+function sfxWin() {
+  initAudio();
+  tone(523, 0.00, 0.14, "triangle", 0.14);
+  tone(659, 0.14, 0.14, "triangle", 0.14);
+  tone(784, 0.28, 0.16, "triangle", 0.14);
+  tone(1046, 0.44, 0.30, "triangle", 0.13);
+}
+
+function sfxBadge() {
+  initAudio();
+  tone(880, 0.00, 0.12, "square", 0.09);
+  tone(1174, 0.12, 0.18, "square", 0.08);
+}
+
+function toggleMute() {
+  state.muted = !state.muted;
+  saveState();
+
+  var icon = el("muteIcon");
+  var button = el("muteBtn");
+
+  if (icon) {
+    icon.textContent = state.muted ? "🔇" : "🔈";
+  }
+  if (button) {
+    button.classList.toggle("muted", state.muted);
+    button.title = state.muted ? "Sounds are off — tap to turn them on" : "Sounds are on — tap to turn them off";
+  }
+
+  if (!state.muted) {
+    initAudio();
+    sfxPop();
+  }
+}
+
+function burstConfetti(howMany, set) {
+  var fx = el("fx");
+  if (!fx) {
+    return;
+  }
+
+  var pieces = set || FOOD_CONFETTI;
+  var layer = document.createElement("div");
+  layer.className = "confetti-layer";
+  fx.appendChild(layer);
+
+  for (var i = 0; i < howMany; i++) {
+    var piece = document.createElement("span");
+    var left = randInt(2, 96);
+    var duration = (1.9 + Math.random() * 1.9).toFixed(2);
+    var isSway = Math.random() < 0.5;
+
+    piece.className = "confetti" + (isSway ? " sway" : "");
+    piece.textContent = pick(pieces);
+    piece.style.left = left + "%";
+    piece.style.fontSize = randInt(18, 34) + "px";
+    piece.style.animationDuration = duration + "s, " + duration + "s";
+    piece.style.animationDelay = (Math.random() * 0.7).toFixed(2) + "s, 0s";
+    piece.style.animationIterationCount = "1, 1";
+
+    layer.appendChild(piece);
+  }
+
+  setTimeout(function () {
+    if (layer.parentNode) {
+      layer.parentNode.removeChild(layer);
+    }
+  }, 5200);
+}
+
+function starRain(howMany) {
+  var fx = el("fx");
+  if (!fx) {
+    return;
+  }
+
+  var layer = document.createElement("div");
+  layer.className = "confetti-layer";
+  fx.appendChild(layer);
+
+  for (var i = 0; i < howMany; i++) {
+    var star = document.createElement("span");
+    star.className = "rain-star";
+    star.textContent = pick(STAR_CONFETTI);
+    star.style.left = randInt(2, 96) + "%";
+    star.style.fontSize = randInt(18, 36) + "px";
+    star.style.animationDuration = (1.8 + Math.random() * 1.6).toFixed(2) + "s";
+    star.style.animationDelay = (Math.random() * 1.1).toFixed(2) + "s";
+    layer.appendChild(star);
+  }
+
+  setTimeout(function () {
+    if (layer.parentNode) {
+      layer.parentNode.removeChild(layer);
+    }
+  }, 5200);
+}
+
+function sparkleBurst(howMany) {
+  var fx = el("fx");
+  if (!fx) {
+    return;
+  }
+
+  var layer = document.createElement("div");
+  layer.className = "confetti-layer";
+  fx.appendChild(layer);
+
+  var startX = window.innerWidth / 2;
+  var startY = window.innerHeight * 0.42;
+
+  for (var i = 0; i < howMany; i++) {
+    var sparkle = document.createElement("span");
+    var angle = Math.random() * Math.PI * 2;
+    var distance = 90 + Math.random() * 220;
+
+    sparkle.className = "sparkle";
+    sparkle.textContent = pick(["✨", "⭐", "🌟", "💫", "🍬"]);
+    sparkle.style.left = startX + "px";
+    sparkle.style.top = startY + "px";
+    sparkle.style.setProperty("--dx", (Math.cos(angle) * distance).toFixed(0) + "px");
+    sparkle.style.setProperty("--dy", (Math.sin(angle) * distance).toFixed(0) + "px");
+    sparkle.style.animationDelay = (Math.random() * 0.25).toFixed(2) + "s";
+    sparkle.style.fontSize = randInt(14, 26) + "px";
+
+    layer.appendChild(sparkle);
+  }
+
+  setTimeout(function () {
+    if (layer.parentNode) {
+      layer.parentNode.removeChild(layer);
+    }
+  }, 1800);
+}
+
+function attachRipples() {
+  var buttons = document.querySelectorAll(".btn");
+  var i;
+
+  for (i = 0; i < buttons.length; i++) {
+    if (buttons[i].dataset.ripple === "yes") {
+      continue;
+    }
+    buttons[i].dataset.ripple = "yes";
+    buttons[i].addEventListener("click", rippleOnButton);
+  }
+}
+
+function rippleOnButton(event) {
+  var button = event.currentTarget;
+  var box = button.getBoundingClientRect();
+  var size = Math.max(box.width, box.height);
+  var ripple = document.createElement("span");
+
+  ripple.className = "ripple";
+  ripple.style.width = size + "px";
+  ripple.style.height = size + "px";
+  ripple.style.left = (event.clientX - box.left - size / 2) + "px";
+  ripple.style.top = (event.clientY - box.top - size / 2) + "px";
+
+  button.appendChild(ripple);
+
+  setTimeout(function () {
+    if (ripple.parentNode) {
+      ripple.parentNode.removeChild(ripple);
+    }
+  }, 620);
+
+  initAudio();
+}
+
+function startFloatingFood() {
+  var layer = el("bgLayer");
+  var howMany = 18;
+  var i;
+
+  if (!layer) {
+    return;
+  }
+
+  for (i = 0; i < howMany; i++) {
+    var food = document.createElement("span");
+    var duration = (16 + Math.random() * 22).toFixed(1);
+    var delay = (-Math.random() * 20).toFixed(1);
+
+    food.className = "float-food" + (Math.random() < 0.5 ? " spin" : "");
+    food.textContent = pick(BG_FOOD);
+    food.style.left = randInt(1, 96) + "%";
+    food.style.top = randInt(2, 94) + "%";
+    food.style.fontSize = randInt(18, 40) + "px";
+    food.style.opacity = (0.16 + Math.random() * 0.22).toFixed(2);
+    food.style.animationDuration = duration + "s, " + duration + "s";
+    food.style.animationDelay = delay + "s, " + delay + "s";
+
+    layer.appendChild(food);
+  }
+}
+
+function printWorksheet(lessonId) {
+  var sheet = el("worksheet");
+
+  if (!sheet) {
+    sheet = document.createElement("div");
+    sheet.id = "worksheet";
+    document.body.appendChild(sheet);
+  }
+
+  var chosen = [];
+  var i;
+
+  if (lessonId) {
+    chosen.push(findLesson(lessonId));
+  } else {
+    for (i = 0; i < LESSONS.length; i++) {
+      chosen.push(LESSONS[i]);
+    }
+  }
+
+  var html =
+    '<h1>🍎 Yummy Math — Grade 1 Practice Worksheet</h1>' +
+    '<p class="ws-line">Name: ______________________________     Date: __________________</p>' +
+    '<p class="ws-note">Write the letter of the correct answer inside the box. ' +
+    'Ask a grown-up to check your work when you are finished!</p>';
+
+  var number = 1;
+
+  for (i = 0; i < chosen.length; i++) {
+    var lesson = chosen[i];
+    if (!lesson) {
+      continue;
+    }
+
+    var list = questionsOf(lesson);
+    var j;
+
+    html += '<h2 class="ws-lesson">' + lesson.icon + " " + esc(lesson.title) + '</h2>';
+
+    for (j = 0; j < list.length; j++) {
+      var question = list[j];
+      var letters = ["A", "B", "C", "D"];
+      var choiceText = [];
+      var k;
+
+      for (k = 0; k < question.choices.length; k++) {
+        choiceText.push(letters[k] + ". " + esc(question.choices[k]));
+      }
+
+      html +=
+        '<div class="ws-question">' +
+          '<div class="ws-number">' + number + '.</div>' +
+          '<div class="ws-body">' +
+            (question.visual ? '<div class="ws-visual">' + esc(question.visual) + '</div>' : "") +
+            '<div class="ws-text">' + esc(question.text) + '</div>' +
+            '<div class="ws-choices">' + choiceText.join("&nbsp;&nbsp;&nbsp;&nbsp;") + '</div>' +
+          '</div>' +
+          '<div class="ws-box"></div>' +
+        '</div>';
+
+      number++;
+    }
+  }
+
+  html += '<p class="ws-note">Great job, little chef! 🧑‍🍳 Remember: practice a little every day.</p>';
+
+  sheet.innerHTML = html;
+  sfxClick();
+
+  try {
+    window.print();
+  } catch (error) {
+
+  }
+}
+
+function onKeyDown(event) {
+  var key = event.key;
+
+  if (key === "Escape") {
+    closeModal();
+    return;
+  }
+
+  if (currentScreen !== "quiz" || !game) {
+    return;
+  }
+
+  if (!game.answered && (key === "1" || key === "2" || key === "3")) {
+    var index = Number(key) - 1;
+    if (index < game.list[game.index].choices.length) {
+      chooseAnswer(index);
+    }
+    return;
+  }
+
+  if (game.answered && (key === "Enter" || key === " ")) {
+    event.preventDefault();
+    goNext();
+  }
+}
+
+var EXTRA_QUESTIONS = {
+
+  count: [
+    {
+      visual: "🥕 🥕 🥕 🥕 🥕",
+      text: "How many carrots are in the basket?",
+      hint: "Touch each carrot and count: 1, 2, 3, 4, 5.",
+      choices: ["5", "6", "4"],
+      answer: 0
+    },
+    {
+      visual: "🍏 🍏 🍏 🍏 🍏 🍏 🍏",
+      text: "How many green apples do you see?",
+      hint: "Count them one by one. The last number you say is the answer.",
+      choices: ["6", "7", "8"],
+      answer: 1
+    },
+    {
+      visual: "5  4  3  ❓",
+      text: "Count backwards: 5, 4, 3, ❓",
+      hint: "Count down, like a rocket: 5, 4, 3, and one less.",
+      choices: ["1", "2", "3"],
+      answer: 1
+    },
+    {
+      visual: "…  8  9",
+      text: "Which number comes just before 9?",
+      hint: "Say the numbers and stop at 8. What comes after 8?",
+      choices: ["7", "8", "10"],
+      answer: 1
+    },
+    {
+      visual: "🍊 🍊 🍊 🍊 🍊 🍊 🍊 🍊 🍊",
+      text: "How many oranges are on the table?",
+      hint: "Count in a group of five, then count the rest.",
+      choices: ["8", "9", "10"],
+      answer: 1
+    }
+  ],
+
+  add: [
+    {
+      visual: "🍎  ➕  🍎",
+      text: "1 + 1 = ?",
+      hint: "One apple and one more apple makes two.",
+      choices: ["1", "2", "3"],
+      answer: 1
+    },
+    {
+      visual: "🍬🍬🍬  ➕  🍬🍬",
+      text: "3 + 2 = ?",
+      hint: "Start at 3 and count two more: 4, 5.",
+      choices: ["4", "5", "6"],
+      answer: 1
+    },
+    {
+      visual: "🍇🍇🍇🍇🍇  ➕  🍇🍇🍇🍇🍇",
+      text: "5 + 5 = ?",
+      hint: "Two hands with five fingers each: 5 and 5 more.",
+      choices: ["9", "10", "11"],
+      answer: 1
+    },
+    {
+      visual: "🍪🍪🍪🍪  ➕  🍪🍪",
+      text: "4 + 2 = ?",
+      hint: "Count all the cookies: 1, 2, 3, 4, 5, 6.",
+      choices: ["5", "6", "7"],
+      answer: 1
+    },
+    {
+      visual: "🍪🍪🍪  ➕  🍪🍪🍪",
+      text: "You have 3 cookies and your friend has 3 cookies. How many cookies altogether?",
+      hint: "Altogether means adding. 3 plus 3.",
+      choices: ["5", "6", "7"],
+      answer: 1
+    }
+  ],
+
+  subtract: [
+    {
+      visual: "🍬 🍬 🍬 🍬",
+      text: "4 − 2 = ?",
+      hint: "Take away two candies and count what is left.",
+      choices: ["1", "2", "3"],
+      answer: 1
+    },
+    {
+      visual: "🍭 🍭 🍭 🍭 🍭 🍭",
+      text: "6 − 3 = ?",
+      hint: "Count backwards three steps from 6: 5, 4, 3.",
+      choices: ["2", "3", "4"],
+      answer: 1
+    },
+    {
+      visual: "🍎 🍎 🍎 🍎 🍎",
+      text: "5 − 5 = ?",
+      hint: "If you take away everything, nothing is left.",
+      choices: ["0", "1", "2"],
+      answer: 0
+    },
+    {
+      visual: "🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇",
+      text: "9 − 2 = ?",
+      hint: "Two less than 9. Count backwards: 8, 7.",
+      choices: ["6", "7", "8"],
+      answer: 1
+    },
+    {
+      visual: "🍬 🍬 🍬 🍬 🍬 🍬 🍬 🍬 🍬 🍬",
+      text: "There are 10 candies. You give 4 to your friend. How many are left?",
+      hint: "10 minus 4. Count on from 4 to 10.",
+      choices: ["5", "6", "7"],
+      answer: 1
+    }
+  ],
+
+  shapes: [
+    {
+      visual: "⚪",
+      text: "How many corners does a circle have?",
+      hint: "Run your finger around a circle — there are no pointy corners.",
+      choices: ["0 (no corners)", "1", "4"],
+      answer: 0
+    },
+    {
+      visual: "🍪 🍞 🍫",
+      text: "Which food is shaped like a circle?",
+      hint: "A circle is round all the way around.",
+      choices: ["🍪 Cookie", "🍞 Bread", "🍫 Chocolate bar"],
+      answer: 0
+    },
+    {
+      visual: "🧀 🍕 🍩",
+      text: "Which food is shaped like a square?",
+      hint: "A square has four equal sides.",
+      choices: ["🧀 Cheese slice", "🍕 Pizza slice", "🍩 Donut"],
+      answer: 0
+    },
+    {
+      visual: "🔺 ⚪ 🟦",
+      text: "Which shape has no corners at all?",
+      hint: "No corners means perfectly round.",
+      choices: ["🔺 Triangle", "⚪ Circle", "🟦 Square"],
+      answer: 1
+    },
+    {
+      visual: "🍩",
+      text: "A donut with a hole in the middle is shaped like what?",
+      hint: "Follow the outside of the donut with your finger.",
+      choices: ["🔺 Triangle", "⚪ Circle", "▭ Rectangle"],
+      answer: 1
+    }
+  ],
+
+  patterns: [
+    {
+      visual: "🍇 🍎 🍇 🍎 🍇 ❓",
+      text: "What comes next?",
+      hint: "The pattern goes grape, apple, grape, apple, grape...",
+      choices: ["🍇 Grapes", "🍎 Apple", "🍌 Banana"],
+      answer: 1
+    },
+    {
+      visual: "🍪 🍪 🍪 🍩 🍪 🍪 🍪 ❓",
+      text: "What comes next?",
+      hint: "Three cookies, then a donut. Three cookies, then...",
+      choices: ["🍪 Cookie", "🍩 Donut", "🧁 Cupcake"],
+      answer: 1
+    },
+    {
+      visual: "🥕 🍅 🥕 🍅 🥕 ❓",
+      text: "What comes next?",
+      hint: "Carrot, tomato, carrot, tomato, carrot...",
+      choices: ["🥕 Carrot", "🍅 Tomato", "🥦 Broccoli"],
+      answer: 1
+    },
+    {
+      visual: "5, 10, 15, ❓",
+      text: "This pattern counts by fives. What comes next?",
+      hint: "Add 5 to 15.",
+      choices: ["16", "20", "25"],
+      answer: 1
+    },
+    {
+      visual: "🍓 🍌 🍇 🍓 🍌 ❓",
+      text: "What comes next?",
+      hint: "The pattern is strawberry, banana, grapes — then it repeats.",
+      choices: ["🍓 Strawberry", "🍌 Banana", "🍇 Grapes"],
+      answer: 2
+    }
+  ],
+
+  compare: [
+    {
+      visual: "5     8",
+      text: "Which number is more?",
+      hint: "More means bigger. Count up to each number.",
+      choices: ["5", "8", "They are the same"],
+      answer: 1
+    },
+    {
+      visual: "6     2     9",
+      text: "Which number is the least?",
+      hint: "Least means the smallest.",
+      choices: ["6", "2", "9"],
+      answer: 1
+    },
+    {
+      visual: "🍕🍕🍕      🍕🍕🍕🍕🍕🍕🍕",
+      text: "Which plate has more pizza?",
+      hint: "Count both plates, then compare the two numbers.",
+      choices: ["3 pizzas", "7 pizzas", "They are equal"],
+      answer: 1
+    },
+    {
+      visual: "12     9     15",
+      text: "Which number is the biggest?",
+      hint: "Biggest means the largest number of all.",
+      choices: ["12", "9", "15"],
+      answer: 2
+    },
+    {
+      visual: "🍇 5      🍇 9      🍇 7",
+      text: "Which bunch of grapes has fewer grapes?",
+      hint: "Fewer means the smallest number.",
+      choices: ["5 grapes", "9 grapes", "7 grapes"],
+      answer: 0
+    }
+  ],
+
+  money: [
+    {
+      visual: "🪙 ₱5   ➕   🪙 ₱1",
+      text: "How much money is ₱5 + ₱1?",
+      hint: "One more than five.",
+      choices: ["₱5", "₱6", "₱7"],
+      answer: 1
+    },
+    {
+      visual: "🪙 ₱1   🪙 ₱5   🪙 ₱10",
+      text: "Which coin is worth the most?",
+      hint: "The biggest number on a coin is worth the most.",
+      choices: ["₱1", "₱5", "₱10"],
+      answer: 2
+    },
+    {
+      visual: "🍌 ₱3   💵 ₱5",
+      text: "A banana costs ₱3. You pay ₱5. How much change do you get?",
+      hint: "Count up from 3 to 5.",
+      choices: ["₱1", "₱2", "₱3"],
+      answer: 1
+    },
+    {
+      visual: "🪙 ₱10   ➕   🪙 ₱10",
+      text: "How much money is ₱10 + ₱10?",
+      hint: "Two tens make twenty.",
+      choices: ["₱15", "₱20", "₱25"],
+      answer: 1
+    },
+    {
+      visual: "🥛 ₱6      🧃 ₱9",
+      text: "Which drink costs less?",
+      hint: "Less money means a smaller number.",
+      choices: ["🥛 ₱6 milk", "🧃 ₱9 juice", "They cost the same"],
+      answer: 0
+    }
+  ],
+
+  shares: [
+    {
+      visual: "🍪 🍪",
+      text: "What is half of 2 cookies?",
+      hint: "Half means sharing into two equal parts.",
+      choices: ["1", "2", "4"],
+      answer: 0
+    },
+    {
+      visual: "🍇 🍇 🍇 🍇 🍇 🍇 🍇 🍇",
+      text: "What is half of 8 grapes?",
+      hint: "Share the grapes into two equal piles and count one pile.",
+      choices: ["3", "4", "5"],
+      answer: 1
+    },
+    {
+      visual: "🥪 🥪 🥪 🥪   👦 👧",
+      text: "Share 4 sandwiches equally between 2 children. How many does each child get?",
+      hint: "Give one sandwich to each child, then give again.",
+      choices: ["1 sandwich", "2 sandwiches", "4 sandwiches"],
+      answer: 1
+    },
+    {
+      visual: "🍕🍕   🍕🍕🍕",
+      text: "Which picture shows two equal halves?",
+      hint: "Equal means both parts are exactly the same size.",
+      choices: ["Two equal slices", "Three slices", "One whole pizza"],
+      answer: 0
+    },
+    {
+      visual: "🍎 🍎 🍎 🍎",
+      text: "What is half of 4 apples?",
+      hint: "Half of 4 is the number you double to get 4.",
+      choices: ["2", "3", "4"],
+      answer: 0
+    }
+  ],
+
+  skip: [
+    {
+      visual: "4, 6, 8, ❓",
+      text: "Count by twos. What comes next?",
+      hint: "Add 2 to 8.",
+      choices: ["9", "10", "12"],
+      answer: 1
+    },
+    {
+      visual: "20, 25, 30, ❓",
+      text: "Count by fives. What comes next?",
+      hint: "Add 5 to 30.",
+      choices: ["35", "40", "32"],
+      answer: 0
+    },
+    {
+      visual: "40, 50, ❓",
+      text: "Count by tens. What comes next?",
+      hint: "Add 10 to 50.",
+      choices: ["55", "60", "70"],
+      answer: 1
+    },
+    {
+      visual: "🍬🍬   🍬🍬   🍬🍬   🍬🍬   🍬🍬",
+      text: "You have 5 pairs of candies. How many candies in all?",
+      hint: "Count by twos five times: 2, 4, 6, 8, 10.",
+      choices: ["5", "10", "15"],
+      answer: 1
+    },
+    {
+      visual: "5, 10, 15   •   2, 4, 6   •   10, 20, 30",
+      text: "Which group counts by fives?",
+      hint: "Look for the group where every number is five more than the one before.",
+      choices: ["5, 10, 15", "2, 4, 6", "10, 20, 30"],
+      answer: 0
+    }
+  ],
+
+  time: [
+    {
+      visual: "🕘    🕓    🕛",
+      text: "Which clock shows 9 o'clock?",
+      hint: "The short hand points to the hour number.",
+      choices: ["🕘 9 o'clock", "🕓 4 o'clock", "🕛 12 o'clock"],
+      answer: 0
+    },
+    {
+      visual: "🍳 ➡️ 🍽️ ➡️ ❓",
+      text: "We eat breakfast, then lunch, then what?",
+      hint: "The last meal of the day.",
+      choices: ["Breakfast", "Dinner", "Lunch"],
+      answer: 1
+    },
+    {
+      visual: "🕑 ➡️ 🕓",
+      text: "How many hours from 2 o'clock to 4 o'clock?",
+      hint: "Count the hours: 2 to 3 is one hour, 3 to 4 is another.",
+      choices: ["1 hour", "2 hours", "3 hours"],
+      answer: 1
+    },
+    {
+      visual: "🍪 🕒      🍽️ 🕕",
+      text: "Snack is at 3 o'clock and dinner is at 6 o'clock. Which comes later?",
+      hint: "Later means the bigger time on the clock in the same day.",
+      choices: ["3 o'clock snack", "6 o'clock dinner", "They are the same"],
+      answer: 1
+    },
+    {
+      visual: "🕛",
+      text: "The short hand points to 12 and the long hand points to 12. What time is it?",
+      hint: "When both hands point to 12, it is twelve o'clock.",
+      choices: ["12 o'clock", "1 o'clock", "6 o'clock"],
+      answer: 0
+    }
+  ]
+
+};
+
+function init() {
+  loadState();
+
+  state.visits = (state.visits || 0) + 1;
+  saveState();
+
+  updateChip(false);
+
+  var icon = el("muteIcon");
+  if (icon) {
+    icon.textContent = state.muted ? "🔇" : "🔈";
+  }
+
+  var button = el("muteBtn");
+  if (button) {
+    button.classList.toggle("muted", state.muted);
+  }
+
+  startFloatingFood();
+  goHome();
+
+  document.addEventListener("keydown", onKeyDown);
+
+  document.addEventListener("click", function warmUp() {
+    initAudio();
+    document.removeEventListener("click", warmUp);
+  });
+
+  if (window.console && window.console.log) {
+    window.console.log("🍎 Yummy Math is ready! Lessons: " + LESSONS.length + " • Questions: " + countAllQuestions());
+  }
+}
+
+BADGES.push(
+  { id: "snackmaster", icon: "🥨", name: "Snack Master",   need: 300, kind: "points",  tip: "Earn 300 points" },
+  { id: "menumaster",  icon: "🍜", name: "Menu Master",    need: 5,   kind: "lessons", tip: "Finish 5 lessons" },
+  { id: "fivestar",    icon: "💎", name: "Five-Star Chef", need: 5,   kind: "perfect", tip: "5 perfect lessons" },
+  { id: "lightning",   icon: "⚡", name: "Lightning Chef", need: 12,  kind: "streak",  tip: "12 correct answers in a row" }
+);
+
+PRAISE.push(
+  "Brilliant counting! 🌈",
+  "You make math look easy! 🍭",
+  "That was a smart bite! 🍫",
+  "Incredible! Keep it up! 🚀",
+  "You are on fire! 🔥",
+  "So clever, little chef! 🎩",
+  "That answer was scrumptious! 🥞",
+  "Wonderful thinking! 🧁",
+  "Yes! You are a star! ⭐",
+  "Sweet! That is right! 🍯"
+);
+
+TRY_AGAIN.push(
+  "Not yet — look at the green answer. 💚",
+  "Keep trying! The green one shows the way. 🧭",
+  "So close! Check the green answer. 🙂",
+  "That is fine! Now you know the answer. 💡",
+  "Let's count again together. You can do it! 🤝"
+);
+
+FUN_FACTS.push(
+  "Did you know? A cucumber is a fruit, not a vegetable! 🥒",
+  "Did you know? Bees visit about two million flowers to make one jar of honey! 🐝",
+  "Did you know? Strawberries have their seeds on the outside! 🍓",
+  "Did you know? An orange has about ten sections inside. Count them next time! 🍊",
+  "Did you know? Peanuts are not nuts — they are beans! 🥜",
+  "Did you know? The biggest pizza ever made was as big as a basketball court! 🍕",
+  "Did you know? Carrots help keep your eyes healthy. 👀",
+  "Did you know? A single apple tree can grow enough apples for 20 pies! 🥧"
+);
+
+CHEF_TIPS.push(
+  "Say the answer out loud before you tap it — that uses two parts of your brain!",
+  "Learning math is like baking: a little practice every day makes it perfect.",
+  "Count your snacks before you eat them. Snack time is math time!",
+  "Make mistakes happily. Every mistake teaches your brain something new."
+);
+
+EXTRA_QUESTIONS.count.push(
+  {
+    visual: "🍍 🍍 🍍 🍍 🍍 🍍",
+    text: "How many pineapples are on the shelf?",
+    hint: "Count them one by one: 1, 2, 3, 4, 5, 6.",
+    choices: ["5", "6", "7"],
+    answer: 1
+  },
+  {
+    visual: "🥝 🥝 🥝",
+    text: "How many kiwis are in the bowl?",
+    hint: "Count each kiwi and say the number out loud.",
+    choices: ["2", "3", "4"],
+    answer: 1
+  },
+  {
+    visual: "14     11",
+    text: "Which number is bigger: 14 or 11?",
+    hint: "Count up to each number. The one you reach later is bigger.",
+    choices: ["14", "11", "They are the same"],
+    answer: 0
+  }
+);
+
+EXTRA_QUESTIONS.add.push(
+  {
+    visual: "🍒🍒🍒🍒🍒🍒  ➕  🍒",
+    text: "6 + 1 = ?",
+    hint: "One more than six.",
+    choices: ["6", "7", "8"],
+    answer: 1
+  },
+  {
+    visual: "🥨🥨🥨🥨  ➕  🥨🥨🥨🥨🥨",
+    text: "4 + 5 = ?",
+    hint: "Start at 4 and count five more: 5, 6, 7, 8, 9.",
+    choices: ["8", "9", "10"],
+    answer: 1
+  },
+  {
+    visual: "🍐🍐🍐🍐🍐🍐🍐  ➕  🍐🍐",
+    text: "7 + 2 = ?",
+    hint: "Two more than seven: 8, 9.",
+    choices: ["8", "9", "10"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.subtract.push(
+  {
+    visual: "🍫 🍫 🍫 🍫 🍫 🍫 🍫",
+    text: "7 − 3 = ?",
+    hint: "Count backwards three steps from 7: 6, 5, 4.",
+    choices: ["3", "4", "5"],
+    answer: 1
+  },
+  {
+    visual: "🍉 🍉 🍉 🍉 🍉 🍉 🍉 🍉",
+    text: "8 − 5 = ?",
+    hint: "Count backwards five steps from 8: 7, 6, 5, 4, 3.",
+    choices: ["2", "3", "4"],
+    answer: 1
+  },
+  {
+    visual: "🍋 🍋 🍋 🍋 🍋 🍋 🍋 🍋 🍋",
+    text: "9 − 9 = ?",
+    hint: "When you take away all of them, what is left?",
+    choices: ["0", "1", "2"],
+    answer: 0
+  }
+);
+
+EXTRA_QUESTIONS.shapes.push(
+  {
+    visual: "🟦",
+    text: "How many sides does a square have?",
+    hint: "Count the straight sides: top, right, bottom, left.",
+    choices: ["3", "4", "5"],
+    answer: 1
+  },
+  {
+    visual: "🍊 🥖 🧀",
+    text: "Which food is round like a ball?",
+    hint: "A ball is round, like a circle in your hands.",
+    choices: ["🍊 Orange", "🥖 Baguette", "🧀 Cheese slice"],
+    answer: 0
+  },
+  {
+    visual: "🚪",
+    text: "A door is long and tall. Which shape is it like?",
+    hint: "Two long sides and two shorter sides.",
+    choices: ["🔺 Triangle", "▭ Rectangle", "⚪ Circle"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.patterns.push(
+  {
+    visual: "🍐 🍐 🥝 🍐 🍐 ❓",
+    text: "What comes next?",
+    hint: "Two pears, then a kiwi. Two pears, then...",
+    choices: ["🍐 Pear", "🥝 Kiwi", "🍇 Grapes"],
+    answer: 1
+  },
+  {
+    visual: "🥨 🍩 🥨 🍩 ❓",
+    text: "What comes next?",
+    hint: "Pretzel, donut, pretzel, donut...",
+    choices: ["🥨 Pretzel", "🍩 Donut", "🍪 Cookie"],
+    answer: 0
+  },
+  {
+    visual: "10, 20, 30, ❓",
+    text: "This pattern counts by tens. What comes next?",
+    hint: "Add 10 to 30.",
+    choices: ["35", "40", "50"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.compare.push(
+  {
+    visual: "3     7",
+    text: "Which number is more?",
+    hint: "Hold up three fingers, then seven. Which is more?",
+    choices: ["3", "7", "They are the same"],
+    answer: 1
+  },
+  {
+    visual: "20     5     13",
+    text: "Which number is the biggest?",
+    hint: "The biggest number is the largest of the three.",
+    choices: ["20", "5", "13"],
+    answer: 0
+  },
+  {
+    visual: "🍋 6      🍋 6",
+    text: "One plate has 6 lemons and the other has 6 lemons. What is true?",
+    hint: "Both plates have the same number.",
+    choices: ["The first has more", "They are equal", "The second has more"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.money.push(
+  {
+    visual: "🪙 ₱1   ➕   🪙 ₱1",
+    text: "How much money is ₱1 + ₱1?",
+    hint: "Two one-peso coins.",
+    choices: ["₱1", "₱2", "₱3"],
+    answer: 1
+  },
+  {
+    visual: "🍞 ₱7   💵 ₱10",
+    text: "Bread costs ₱7. You pay ₱10. How much change do you get?",
+    hint: "Count up from 7 to 10: 8, 9, 10.",
+    choices: ["₱2", "₱3", "₱4"],
+    answer: 1
+  },
+  {
+    visual: "🪙 ₱5  ➕  🪙 ₱5  ➕  🪙 ₱5",
+    text: "How much money is ₱5 + ₱5 + ₱5?",
+    hint: "Five, ten, fifteen!",
+    choices: ["₱10", "₱15", "₱20"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.shares.push(
+  {
+    visual: "🧁 🧁 🧁 🧁 🧁 🧁",
+    text: "What is half of 6 muffins?",
+    hint: "Share the muffins into two equal groups.",
+    choices: ["2", "3", "4"],
+    answer: 1
+  },
+  {
+    visual: "🍇 🍇 🍇 🍇 🍇 🍇   👦 👧",
+    text: "Share 6 grapes equally between 2 children. How many grapes each?",
+    hint: "One for you, one for me... then again and again.",
+    choices: ["2 grapes", "3 grapes", "4 grapes"],
+    answer: 1
+  },
+  {
+    visual: "🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟 🍟",
+    text: "What is half of 10 fries?",
+    hint: "Half of ten is the number that doubles to make ten.",
+    choices: ["4", "5", "6"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.skip.push(
+  {
+    visual: "2, 4, 6, 8, ❓",
+    text: "Count by twos. What comes next?",
+    hint: "Add 2 to 8.",
+    choices: ["9", "10", "11"],
+    answer: 1
+  },
+  {
+    visual: "10, 20, 30, 40, ❓",
+    text: "Count by tens. What comes next?",
+    hint: "Add 10 to 40.",
+    choices: ["45", "50", "55"],
+    answer: 1
+  },
+  {
+    visual: "🍬🍬   🍬🍬   🍬🍬",
+    text: "You have 3 pairs of candies. How many candies in all?",
+    hint: "Count by twos three times: 2, 4, 6.",
+    choices: ["3", "6", "9"],
+    answer: 1
+  }
+);
+
+EXTRA_QUESTIONS.time.push(
+  {
+    visual: "🕖",
+    text: "What time does this clock show?",
+    hint: "The short hand points to the hour number.",
+    choices: ["6 o'clock", "7 o'clock", "8 o'clock"],
+    answer: 1
+  },
+  {
+    visual: "🕕       🕘",
+    text: "Which time comes earlier: 6 o'clock or 9 o'clock?",
+    hint: "Earlier means sooner in the day.",
+    choices: ["6 o'clock", "9 o'clock", "They are the same"],
+    answer: 0
+  },
+  {
+    visual: "🎠 🕒      🍪 🕓",
+    text: "Playing is at 3 o'clock and snack is at 4 o'clock. Which happens first?",
+    hint: "3 comes before 4 on the clock.",
+    choices: ["Playing at 3", "Snack at 4", "They happen together"],
+    answer: 0
+  }
+);
+
+init();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a42875963a7ed76d',t:'MTc5MDY1ODM5NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
